@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="日本富士山樱花封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#9dc8ef"/>
+      <stop offset=".62" stop-color="#dceaf0"/>
+      <stop offset="1" stop-color="#b6c9bd"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="160" fill="url(#sky)"/>
+  <circle cx="37" cy="32" r="24" fill="#efcdbf" opacity=".8"/>
+  <path d="M33 48c41-8 78-2 113 19 30 18 58 27 107 16v77H0v-47c37-16 57-44 33-65Z" fill="#799d8d" opacity=".55"/>
+  <path d="M42 132 119 36l78 105H22Z" fill="#345a70"/>
+  <path d="M119 36 147 82l-44-18Z" fill="#f3f0eb"/>
+  <path d="M0 119c39-10 74-4 111-9 46-6 91-21 129-8v58H0Z" fill="#6c947c"/>
+  <path d="M144 41c24 8 45 25 61 51" stroke="#8c6d48" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#e99eac">
+    <circle cx="171" cy="52" r="4"/>
+    <circle cx="185" cy="65" r="4"/>
+    <circle cx="198" cy="82" r="4"/>
+    <circle cx="153" cy="45" r="3.5"/>
+    <circle cx="211" cy="101" r="3.5"/>
+  </g>
+</svg>

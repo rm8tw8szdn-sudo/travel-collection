@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 95" role="img" aria-label="斯德哥尔摩封面">
+  <rect width="180" height="95" fill="#b9cfdc"/>
+  <rect x="22" y="43" width="31" height="35" fill="#b95a42"/><rect x="60" y="35" width="42" height="43" fill="#ce8846"/><rect x="111" y="47" width="36" height="31" fill="#d9aa60"/>
+  <path d="M0 76h180v19H0Z" fill="#253d47" opacity=".58"/>
+</svg>

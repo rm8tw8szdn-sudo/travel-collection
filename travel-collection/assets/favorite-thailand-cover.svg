@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="泰国海岛封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#61b1dc"/>
+      <stop offset=".65" stop-color="#a7e5df"/>
+      <stop offset="1" stop-color="#f4dfb5"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#63d6d0"/>
+      <stop offset="1" stop-color="#2086a7"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="160" fill="url(#sky)"/>
+  <path d="M0 90c43-8 75 2 118-4 53-8 91-20 122-10v84H0Z" fill="url(#water)"/>
+  <path d="M0 121c43-16 84-8 123-17 46-11 89-4 117 4v52H0Z" fill="#f3dfba"/>
+  <path d="M114 101 171 50l69 70v40H91Z" fill="#456f55"/>
+  <path d="M155 65c-11 39-44 68-103 87" stroke="#226846" stroke-width="6" stroke-linecap="round"/>
+  <path d="M64 62c-18 12-29 28-33 50 24-5 43-19 56-41Z" fill="#2d7a52"/>
+  <path d="M82 66c-1-18-8-34-23-48-9 20-8 40 2 58Z" fill="#2f8458"/>
+  <path d="M93 82c15-13 31-18 50-13-12 17-30 28-54 31Z" fill="#378f61"/>
+  <path d="M0 144c54-13 106-4 157-14 31-6 57-3 83 4v26H0Z" fill="#f6edcc"/>
+</svg>

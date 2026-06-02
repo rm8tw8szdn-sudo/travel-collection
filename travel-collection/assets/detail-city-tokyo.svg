@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 92 72" role="img" aria-label="东京">
+  <rect width="92" height="72" fill="#a8c8eb"/>
+  <circle cx="70" cy="16" r="10" fill="#f0caa3"/>
+  <rect x="17" y="24" width="11" height="48" fill="#423b38"/>
+  <rect x="33" y="12" width="8" height="60" fill="#5c4a41"/>
+  <rect x="53" y="29" width="12" height="43" fill="#4c423d"/>
+  <path d="M0 58c26-10 53-8 92-21v35H0Z" fill="#1e2d2e"/>
+</svg>

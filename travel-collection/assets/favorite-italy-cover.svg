@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="意大利罗马斗兽场封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#bdd8e9"/>
+      <stop offset=".58" stop-color="#ead1b8"/>
+      <stop offset="1" stop-color="#9d7d68"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="160" fill="url(#sky)"/>
+  <circle cx="190" cy="40" r="20" fill="#e8b779" opacity=".68"/>
+  <ellipse cx="127" cy="111" rx="86" ry="45" fill="#9b765c"/>
+  <ellipse cx="127" cy="113" rx="69" ry="33" fill="#d0a57a"/>
+  <ellipse cx="127" cy="114" rx="49" ry="22" fill="#8c6a55"/>
+  <path d="M45 91c28-24 143-24 171 0v56H45Z" fill="#b18463"/>
+  <path d="M50 97c31-21 132-21 163 0" stroke="#e0bd8b" stroke-width="5" fill="none"/>
+  <g fill="#6c5145">
+    <path d="M60 105h14v23H60zM88 101h15v27H88zM116 99h16v28h-16zM145 101h15v27h-15zM173 105h14v23h-14z"/>
+  </g>
+  <path d="M45 129h171v31H45Z" fill="#7b5a4a"/>
+  <path d="M0 137c38-10 76-4 115-8 48-5 91-15 125-8v39H0Z" fill="#6c5449" opacity=".44"/>
+</svg>

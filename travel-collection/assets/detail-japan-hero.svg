@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 490 290" role="img" aria-label="富士山与樱花">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="290">
+      <stop stop-color="#9fc9f1"/>
+      <stop offset=".45" stop-color="#e8d8c7"/>
+      <stop offset="1" stop-color="#4f6b7e"/>
+    </linearGradient>
+    <linearGradient id="mountain" x1="65" x2="380" y1="70" y2="250">
+      <stop stop-color="#eef5f1"/>
+      <stop offset=".46" stop-color="#637f9d"/>
+      <stop offset="1" stop-color="#203044"/>
+    </linearGradient>
+  </defs>
+  <rect width="490" height="290" fill="url(#sky)"/>
+  <path d="M0 203c62-36 116-47 172-35 74 17 116 48 195 22 49-16 82-8 123 16v84H0Z" fill="#405a72"/>
+  <path d="M62 221 246 52l178 169Z" fill="url(#mountain)"/>
+  <path d="M246 52 304 221H62Z" fill="#526f90"/>
+  <path d="m212 84 34-32 37 57c-23-14-46-14-71-25Z" fill="#fffdf4"/>
+  <path d="M0 246c70-28 145-24 222-4 103 27 183 7 268-19v67H0Z" fill="#203241"/>
+  <path d="M305 83c49 3 98 16 162 48" fill="none" stroke="#75544f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M356 108c29-18 57-28 86-30" fill="none" stroke="#75544f" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#f2b7bc" opacity=".9">
+    <circle cx="347" cy="99" r="8"/><circle cx="377" cy="94" r="6"/><circle cx="405" cy="107" r="7"/>
+    <circle cx="432" cy="122" r="6"/><circle cx="386" cy="126" r="7"/><circle cx="454" cy="137" r="6"/>
+    <circle cx="329" cy="115" r="6"/><circle cx="417" cy="84" r="5"/><circle cx="462" cy="101" r="5"/>
+  </g>
+  <path d="M0 210c54-23 119-28 188-14 104 21 164 48 302 8v86H0Z" fill="#0c1720" opacity=".22"/>
+</svg>

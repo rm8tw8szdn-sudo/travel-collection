@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="巴黎城市封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#9ec9e8"/>
+      <stop offset=".67" stop-color="#e1b982"/>
+      <stop offset="1" stop-color="#263842"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" fill="url(#sky)"/>
+  <circle cx="33" cy="45" r="17" fill="#e4b074" opacity=".62"/>
+  <path d="M0 124c33-16 60-8 91-15 31-6 49-4 69 2v49H0Z" fill="#2a3a43"/>
+  <path d="M76 33 94 138H58Z" fill="#2f3f46"/>
+  <path d="M76 33 66 80h21Z" fill="#4b5a61"/>
+  <path d="M54 86h43M48 121h61M66 61h21" stroke="#d4a368" stroke-width="4" stroke-linecap="round"/>
+  <path d="M59 138h35l10 22H49Z" fill="#202e35"/>
+  <path d="M29 116h23v44H29zM111 113h24v47h-24z" fill="#273943"/>
+</svg>

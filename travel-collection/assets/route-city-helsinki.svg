@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 95" role="img" aria-label="赫尔辛基封面">
+  <rect width="180" height="95" fill="#c8d9e2"/>
+  <rect x="35" y="43" width="92" height="34" fill="#e9e6d5"/>
+  <path d="M50 43 81 23l31 20H50Z" fill="#7f8f84"/>
+  <rect x="76" y="22" width="10" height="55" fill="#e9e6d5"/>
+  <path d="M0 75h180v20H0Z" fill="#33454f" opacity=".55"/>
+</svg>

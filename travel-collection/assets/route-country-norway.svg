@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="挪威封面">
+  <rect width="240" height="160" fill="#7eb1ca"/>
+  <path d="M0 116 54 48l47 58 36-37 103 85H0Z" fill="#23445a"/>
+  <path d="M54 48 76 82l-34-18Z" fill="#eaf0ec"/>
+  <path d="M0 112c40-12 70-2 111-5 46-4 69-20 129-6v59H0Z" fill="#0e2a34" opacity=".72"/>
+  <path d="M142 101h20v23h-20zM170 94h26v30h-26z" fill="#dba85d"/>
+  <path d="M142 101l10-12 13 12h-23ZM170 94l13-14 17 14h-30Z" fill="#714a2d"/>
+</svg>

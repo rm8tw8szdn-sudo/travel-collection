@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="冰岛极光封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#092033"/>
+      <stop offset=".56" stop-color="#173d4b"/>
+      <stop offset="1" stop-color="#061720"/>
+    </linearGradient>
+    <linearGradient id="aurora" x1=".1" x2=".9" y1=".15" y2=".38">
+      <stop stop-color="#4bb57a" stop-opacity=".03"/>
+      <stop offset=".36" stop-color="#83ef84" stop-opacity=".82"/>
+      <stop offset=".7" stop-color="#b6ee6c" stop-opacity=".64"/>
+      <stop offset="1" stop-color="#40b986" stop-opacity=".08"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="160" fill="url(#sky)"/>
+  <path d="M15 53c42-28 73-4 114-12 36-7 55-20 99 11-44 8-67-4-104 4-45 10-78-2-109-3Z" fill="url(#aurora)" opacity=".95"/>
+  <path d="M0 110 51 57l45 49 38-33 83 75H0Z" fill="#173044"/>
+  <path d="M51 57 68 83l-29-13Z" fill="#eef1ef"/>
+  <path d="M112 125 166 55l74 87v18H95Z" fill="#203b4d"/>
+  <path d="M166 55 187 93l-34-16Z" fill="#eef1ef"/>
+  <path d="M0 121c44-8 77 1 119-3 44-4 75-15 121-7v49H0Z" fill="#081620" opacity=".72"/>
+  <path d="M148 113h16v20h-16zM174 106h20v27h-20z" fill="#d9a258"/>
+  <path d="M148 113l8-10 10 10h-18ZM174 106l10-12 12 12h-22Z" fill="#6c4c2e"/>
+</svg>

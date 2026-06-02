@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>日本 · 国家详情</title>
+    <link rel="stylesheet" href="mobile.css" />
+    <script src="home-components.js" defer></script>
+    <script src="country-detail.js" defer></script>
+    <script src="app-shared.js" defer></script>
+  </head>
+  <body>
+    <main class="home-screen country-screen" aria-label="日本国家详情">
+      <section class="country-hero" aria-label="日本">
+        <img class="country-hero-image" src="assets/detail-japan-hero.svg" alt="富士山与樱花封面图" />
+        <span class="country-hero-shade"></span>
+
+        <status-bar></status-bar>
+
+        <div class="country-hero-actions">
+          <button class="country-icon-button country-back" type="button" aria-label="返回图鉴" data-back>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"></path></svg>
+          </button>
+          <div>
+            <button class="country-icon-button" type="button" aria-label="分享" data-share>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"></path><path d="m8 8 4-4 4 4"></path><path d="M6 12v7h12v-7"></path></svg>
+            </button>
+            <button class="country-icon-button" type="button" aria-label="收藏" data-favorite>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19.2S5.2 15.1 5.2 9.9A3.7 3.7 0 0 1 12 7.8a3.7 3.7 0 0 1 6.8 2.1c0 5.2-6.8 9.3-6.8 9.3Z"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="country-hero-copy">
+          <h1>日本</h1>
+          <p>亚洲&nbsp;&nbsp;|&nbsp;&nbsp;126,500 km²&nbsp;&nbsp;|&nbsp;&nbsp;首都：东京&nbsp;&nbsp;|&nbsp;&nbsp;语言：日语</p>
+        </div>
+      </section>
+
+      <section class="country-content">
+        <p class="country-intro">融合传统与现代的国度，四季分明，文化多元，值得一去再去。</p>
+
+        <section class="country-action-card" aria-label="国家操作">
+          <button type="button" data-explore-toggle data-country-code="JP">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 12.2 11 14.4l4.5-5"></path><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"></path></svg>
+            <span>未去</span>
+          </button>
+          <button type="button" data-favorite>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19.2S5.2 15.1 5.2 9.9A3.7 3.7 0 0 1 12 7.8a3.7 3.7 0 0 1 6.8 2.1c0 5.2-6.8 9.3-6.8 9.3Z"></path></svg>
+            收藏
+          </button>
+          <button type="button" data-share>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a3 3 0 1 0-2.7-1.7L8.8 10a3 3 0 1 0 0 4l6.5 3.7A3 3 0 1 0 16 16"></path></svg>
+            分享
+          </button>
+        </section>
+
+        <section class="country-visit-record" data-visit-record hidden aria-label="我的记录">
+          <div class="country-section-head">
+            <h2>我的记录</h2>
+            <button class="country-more-button" type="button" aria-label="更多操作" data-record-more>...</button>
+          </div>
+          <div class="country-record-card">
+            <span>状态：已去</span>
+            <span>去过时间：2026.05.20</span>
+            <span>停留天数：5天</span>
+            <span>笔记：12条</span>
+          </div>
+        </section>
+
+        <section class="country-section" aria-label="推荐城市">
+          <div class="country-section-head">
+            <h2>推荐城市</h2>
+            <a href="#">查看全部 <span aria-hidden="true">›</span></a>
+          </div>
+          <div class="country-city-list">
+            <button class="country-mini-card" type="button" data-city="东京" data-share-card-trigger data-share-type="city">
+              <img src="assets/detail-city-tokyo.svg" alt="东京封面图" />
+              <span></span>
+              <strong>东京</strong>
+              <em>已去</em>
+            </button>
+            <button class="country-mini-card" type="button" data-city="京都">
+              <img src="assets/detail-city-kyoto.svg" alt="京都封面图" />
+              <span></span>
+              <strong>京都</strong>
+              <em>已去</em>
+            </button>
+            <button class="country-mini-card" type="button" data-city="大阪">
+              <img src="assets/detail-city-osaka.svg" alt="大阪封面图" />
+              <span></span>
+              <strong>大阪</strong>
+              <em>已去</em>
+            </button>
+            <button class="country-mini-card" type="button" data-city="札幌">
+              <img src="assets/detail-city-sapporo.svg" alt="札幌封面图" />
+              <span></span>
+              <strong>札幌</strong>
+              <em>未去</em>
+            </button>
+          </div>
+        </section>
+
+        <section class="country-section country-routes" aria-label="相关路线">
+          <div class="country-section-head">
+            <h2>相关路线</h2>
+            <a href="#">查看全部 <span aria-hidden="true">›</span></a>
+          </div>
+          <div class="country-route-list">
+            <button class="country-route-card" type="button" data-route="日本经典线">
+              <img src="assets/detail-route-classic.svg" alt="日本经典线封面图" />
+              <span></span>
+              <strong>日本经典线</strong>
+              <em>7天 · 3城</em>
+            </button>
+            <button class="country-route-card" type="button" data-route="北海道之旅">
+              <img src="assets/detail-route-hokkaido.svg" alt="北海道之旅封面图" />
+              <span></span>
+              <strong>北海道之旅</strong>
+              <em>6天 · 2城</em>
+            </button>
+          </div>
+        </section>
+      </section>
+
+      <div class="flow-overlay" hidden data-explore-modal>
+        <section class="flow-modal explore-modal" role="dialog" aria-modal="true" aria-label="标记为已探索">
+          <h2>标记为已探索</h2>
+          <label>
+            <span>去过时间</span>
+            <input type="text" value="2026.05.20" data-visit-date />
+          </label>
+          <label>
+            <span>添加笔记（可选）</span>
+            <textarea rows="3" data-visit-note>第一次去冰岛，很震撼！</textarea>
+          </label>
+          <button type="button" data-save-explore>保存</button>
+        </section>
+      </div>
+      <div class="record-menu" hidden data-record-menu>
+        <button type="button" data-edit-record>编辑记录</button>
+        <button type="button" data-mark-unvisited>标记为未去</button>
+        <button type="button" data-delete-record>删除记录</button>
+      </div>
+      <bottom-tab-bar active="图鉴"></bottom-tab-bar>
+    </main>
+  </body>
+</html>

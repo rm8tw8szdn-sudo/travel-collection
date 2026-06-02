@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="芬兰封面">
+  <rect width="240" height="160" fill="#d8e2e8"/>
+  <path d="M0 128 58 80l43 43 61-73 78 86v24H0Z" fill="#b7c9d4"/>
+  <path d="M162 50 187 85l-38-17Z" fill="#f3f7f7"/>
+  <circle cx="42" cy="45" r="17" fill="#f0d2a7"/>
+  <path d="M30 123c39-15 72-8 116-8 34 0 62 9 94-3v48H0v-38Z" fill="#49626d" opacity=".34"/>
+</svg>

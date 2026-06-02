@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 150" role="img" aria-label="冰岛自然封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="150">
+      <stop stop-color="#9cc8f6"/>
+      <stop offset=".46" stop-color="#e9ddd1"/>
+      <stop offset="1" stop-color="#526775"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="150" fill="url(#sky)"/>
+  <circle cx="84" cy="37" r="18" fill="#f1ceb4" opacity=".75"/>
+  <path d="M0 103c20-14 38-21 60-17 20 3 34 16 60 7v57H0Z" fill="#586b76"/>
+  <path d="M2 110 46 58l38 53Z" fill="#313f55"/>
+  <path d="M46 58 61 111H2Z" fill="#4c6478"/>
+  <path d="M67 106 96 67l24 39Z" fill="#394b63"/>
+  <path d="m39 67 7-9 9 16c-6-3-10-3-16-7Z" fill="#fffdf1"/>
+  <path d="M0 124c26-8 45-6 67 1 19 6 34 6 53 0v25H0Z" fill="#2f4749"/>
+</svg>

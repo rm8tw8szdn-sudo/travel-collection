@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>我的行程</title>
+    <link rel="stylesheet" href="mobile.css" />
+    <script src="home-components.js" defer></script>
+    <script src="trips.js" defer></script>
+    <script src="app-shared.js" defer></script>
+  </head>
+  <body>
+    <main class="home-screen trip-screen" aria-label="我的行程">
+      <status-bar></status-bar>
+
+      <header class="trip-header">
+        <h1>我的行程</h1>
+        <button type="button" data-new-trip>+ 新建行程</button>
+      </header>
+
+      <section class="trip-tabs" aria-label="行程筛选">
+        <button class="active" type="button" data-trip-filter="全部">全部</button>
+        <button type="button" data-trip-filter="待出行">待出行</button>
+        <button type="button" data-trip-filter="已完成">已完成</button>
+        <button type="button" data-trip-filter="收藏">收藏</button>
+      </section>
+
+      <section class="trip-section" aria-label="待出行">
+        <h2>待出行</h2>
+        <div class="trip-card-list" data-trip-list-upcoming>
+          <button class="trip-card" type="button" data-trip-name="北欧极光之旅" data-trip-status="待出行" data-share-card-trigger data-share-type="trip">
+            <img src="assets/trip-nordic-cover.svg" alt="北欧极光之旅封面图" />
+            <span class="trip-card-copy">
+              <strong>北欧极光之旅</strong>
+              <em>挪威 · 冰岛 · 芬兰</em>
+              <small>2026.07.18 - 07.30</small>
+              <small>12天 · 3国</small>
+            </span>
+            <span class="trip-status planning">规划中</span>
+          </button>
+
+          <button class="trip-card" type="button" data-trip-name="日本关西之旅" data-trip-status="待出行">
+            <img src="assets/trip-kansai-cover.svg" alt="日本关西之旅封面图" />
+            <span class="trip-card-copy">
+              <strong>日本关西之旅</strong>
+              <em>日本</em>
+              <small>2026.06.10 - 06.17</small>
+              <small>8天 · 4城</small>
+            </span>
+            <span class="trip-status preparing">准备中</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="trip-section trip-completed" aria-label="已完成">
+        <h2>已完成</h2>
+        <div class="trip-card-list">
+          <button class="trip-card" type="button" data-trip-name="土耳其之旅" data-trip-status="已完成">
+            <img src="assets/trip-turkey-cover.svg" alt="土耳其之旅封面图" />
+            <span class="trip-card-copy">
+              <strong>土耳其之旅</strong>
+              <em>土耳其</em>
+              <small>2026.04.10 - 04.17</small>
+              <small>8天 · 3城</small>
+            </span>
+            <span class="trip-status done">已完成</span>
+          </button>
+        </div>
+      </section>
+
+      <div class="trip-create-modal" hidden data-trip-modal>
+        <section class="trip-create-panel" data-trip-step="1" aria-label="行程基本信息">
+          <strong>行程基本信息</strong>
+          <label><span>行程名称（选填）</span><input type="text" value="北欧极光之旅" data-trip-name-input /></label>
+          <label><span>出发日期</span><input type="text" value="2026.07.18" data-trip-start-input /></label>
+          <label><span>结束日期</span><input type="text" value="2026.07.30" data-trip-end-input /></label>
+          <label><span>备注（选填）</span><textarea rows="2" data-trip-note-input></textarea></label>
+          <div class="trip-modal-actions">
+            <button class="secondary" type="button" data-close-trip-modal>关闭</button>
+            <button type="button" data-trip-next>下一步</button>
+          </div>
+        </section>
+        <section class="trip-create-panel" data-trip-step="2" hidden aria-label="添加国家或城市">
+          <strong>添加国家 / 城市</strong>
+          <label><span>搜索国家或城市</span><input type="text" placeholder="搜索国家或城市" data-place-search /></label>
+          <div class="trip-selected-chips" aria-label="已选国家城市">
+            <button type="button" data-chip="挪威">挪威</button>
+            <button type="button" data-chip="冰岛">冰岛</button>
+            <button type="button" data-chip="芬兰">芬兰</button>
+          </div>
+          <button class="trip-add-more" type="button" data-add-place>+ 添加更多</button>
+          <div class="trip-selected-list">
+            <span>挪威 <button type="button" data-remove-place="挪威">×</button></span>
+            <span>冰岛 <button type="button" data-remove-place="冰岛">×</button></span>
+            <span>芬兰 <button type="button" data-remove-place="芬兰">×</button></span>
+          </div>
+          <div class="trip-modal-actions">
+            <button class="secondary" type="button" data-trip-prev>上一步</button>
+            <button type="button" data-trip-next>下一步</button>
+          </div>
+        </section>
+        <section class="trip-create-panel" data-trip-step="3" hidden aria-label="完成确认">
+          <strong>完成确认</strong>
+          <article class="trip-preview-card" data-trip-preview>
+            <img src="assets/trip-nordic-cover.svg" alt="北欧极光之旅封面图" />
+            <span>
+              <b>北欧极光之旅</b>
+              <em>挪威 · 冰岛 · 芬兰</em>
+              <small>2026.07.18 - 07.30</small>
+              <small>12天 · 3国</small>
+            </span>
+          </article>
+          <div class="trip-modal-actions">
+            <button class="secondary" type="button" data-trip-prev>上一步</button>
+            <button type="button" data-create-trip>创建行程</button>
+          </div>
+        </section>
+      </div>
+
+      <bottom-tab-bar active="行程"></bottom-tab-bar>
+    </main>
+  </body>
+</html>

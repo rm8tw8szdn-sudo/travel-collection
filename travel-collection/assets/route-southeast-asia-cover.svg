@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 84" role="img" aria-label="东南亚经典线">
+  <rect width="100" height="84" fill="#b8d9ea"/>
+  <circle cx="24" cy="18" r="10" fill="#eec9a5"/>
+  <path d="M0 58c20-15 39-20 59-13 16 6 27 3 41-7v46H0Z" fill="#6c8a75"/>
+  <path d="M7 63 38 28l31 35Z" fill="#2d4a4f"/>
+  <path d="M38 28 49 63H7Z" fill="#5e7e77"/>
+  <path d="M0 69c34-10 63-7 100-14v29H0Z" fill="#27412f"/>
+</svg>

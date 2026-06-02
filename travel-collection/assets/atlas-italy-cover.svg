@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 150" role="img" aria-label="意大利城市封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="150">
+      <stop stop-color="#d7c3b6"/>
+      <stop offset=".48" stop-color="#e7d6c4"/>
+      <stop offset="1" stop-color="#836c5d"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="150" fill="url(#sky)"/>
+  <circle cx="91" cy="35" r="16" fill="#f0c38d" opacity=".75"/>
+  <path d="M0 100h120v50H0Z" fill="#554d4a"/>
+  <path d="M18 72h28v78H18Z" fill="#876c62"/>
+  <path d="M25 54h14v18H25Z" fill="#6d5852"/>
+  <path d="M68 50h21v100H68Z" fill="#7a6259"/>
+  <path d="M75 25h7v25h-7Z" fill="#493f3c"/>
+  <path d="M58 82h46v68H58Z" fill="#967865"/>
+  <path d="M8 92h22v58H8Z" fill="#6e5d59"/>
+  <path d="M36 96h25v54H36Z" fill="#9d806e"/>
+  <path d="M69 88h35" stroke="#d1b59d" stroke-width="3"/>
+  <path d="M23 83h18M75 62h9M64 101h10M84 101h10M18 110h11M41 112h13" stroke="#ead7c3" stroke-width="2" opacity=".7"/>
+</svg>

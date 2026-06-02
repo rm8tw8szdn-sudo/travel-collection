@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="巴塞罗那城市封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#b7d4e8"/>
+      <stop offset=".62" stop-color="#e4c09d"/>
+      <stop offset="1" stop-color="#8a684f"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" fill="url(#sky)"/>
+  <circle cx="34" cy="42" r="19" fill="#e5b17b" opacity=".6"/>
+  <path d="M0 121c28-15 53-8 82-16 31-9 55-5 78 3v52H0Z" fill="#7d5d48"/>
+  <path d="M29 58h15v82H29zM61 38h17v102H61zM98 48h16v92H98zM124 70h15v70h-15z" fill="#6c4f3e"/>
+  <path d="M29 58l8-18 7 18M61 38l9-23 8 23M98 48l8-21 8 21M124 70l8-17 7 17" fill="#8c664c"/>
+  <path d="M25 116h116v44H25Z" fill="#8a654f"/>
+  <path d="M39 127h13v21H39zM68 126h13v22H68zM98 126h13v22H98zM124 128h12v20h-12z" fill="#3e302b"/>
+</svg>

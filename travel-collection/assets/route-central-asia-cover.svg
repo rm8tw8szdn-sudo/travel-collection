@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 84" role="img" aria-label="中亚五国环线">
+  <rect width="100" height="84" fill="#a9cde9"/>
+  <circle cx="77" cy="18" r="11" fill="#efc49b"/>
+  <path d="M0 58c20-18 41-24 64-17 16 5 26 4 36-2v45H0Z" fill="#516d73"/>
+  <path d="M12 56 45 20l36 36Z" fill="#465f74"/>
+  <path d="M45 20 58 56H12Z" fill="#7992a7"/>
+  <path d="M0 68c31-11 54-9 100-18v34H0Z" fill="#223b38"/>
+</svg>

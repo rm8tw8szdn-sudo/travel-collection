@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 82" role="img" aria-label="日本经典线">
+  <rect width="160" height="82" fill="#a7caef"/>
+  <circle cx="126" cy="19" r="13" fill="#efc8a3"/>
+  <path d="M5 66 55 16l47 50Z" fill="#334b67"/>
+  <path d="M55 16 72 66H5Z" fill="#59758e"/>
+  <path d="M91 51h48v31H91Z" fill="#41352f"/>
+  <path d="M100 38h11v13h-11ZM119 28h10v23h-10Z" fill="#6a5145"/>
+  <path d="M0 65c39-10 80-8 160-24v41H0Z" fill="#15272b" opacity=".7"/>
+</svg>

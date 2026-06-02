@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 150" role="img" aria-label="日本雪山封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="150">
+      <stop stop-color="#b8d7f2"/>
+      <stop offset=".54" stop-color="#f2efe5"/>
+      <stop offset="1" stop-color="#8eb292"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="150" fill="url(#sky)"/>
+  <circle cx="28" cy="34" r="18" fill="#f4d9c9" opacity=".8"/>
+  <path d="M9 112 60 30l53 82Z" fill="#263c5a"/>
+  <path d="M60 30 75 112H9Z" fill="#40627d"/>
+  <path d="m51 44 9-14 12 25c-8-4-14-5-21-11Z" fill="#fffdf1"/>
+  <path d="M0 118c22-6 43-5 65 1 19 6 36 4 55-8v39H0Z" fill="#8aa37c"/>
+  <path d="M0 134c25-7 48-6 72 1 17 5 32 4 48-2v17H0Z" fill="#435d3a"/>
+</svg>

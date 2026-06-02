@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 92 72" role="img" aria-label="京都">
+  <rect width="92" height="72" fill="#b6c8df"/>
+  <circle cx="21" cy="17" r="10" fill="#f0cfad"/>
+  <path d="M15 42h62v30H15Z" fill="#20291f"/>
+  <path d="m12 42 34-24 34 24Z" fill="#394a31"/>
+  <path d="m26 43 20-14 20 14Z" fill="#121a14"/>
+  <rect x="40" y="43" width="12" height="29" fill="#695041"/>
+  <path d="M0 61c26-8 47-8 92-2v13H0Z" fill="#102015"/>
+</svg>

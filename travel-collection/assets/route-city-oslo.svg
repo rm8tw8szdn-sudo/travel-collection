@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 95" role="img" aria-label="奥斯陆封面">
+  <rect width="180" height="95" fill="#a6c7d8"/>
+  <path d="M0 72 35 34l30 34 28-23 87 50H0Z" fill="#315565"/>
+  <rect x="18" y="55" width="28" height="24" fill="#b95f44"/><rect x="54" y="49" width="34" height="30" fill="#d18b51"/>
+  <path d="M0 77h180v18H0Z" fill="#102630" opacity=".55"/>
+</svg>

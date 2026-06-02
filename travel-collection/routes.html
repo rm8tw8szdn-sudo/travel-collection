@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>路线库</title>
+    <link rel="stylesheet" href="mobile.css" />
+    <script src="home-components.js" defer></script>
+    <script src="routes.js" defer></script>
+    <script src="app-shared.js" defer></script>
+  </head>
+  <body>
+    <main class="home-screen route-screen" aria-label="路线库">
+      <status-bar></status-bar>
+
+      <header class="route-header">
+        <h1>路线库</h1>
+      </header>
+
+      <label class="atlas-search route-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m20 20-4.2-4.2M10.7 17a6.3 6.3 0 1 1 0-12.6 6.3 6.3 0 0 1 0 12.6Z"></path>
+        </svg>
+        <input type="search" placeholder="搜索路线" aria-label="搜索路线" data-route-search />
+      </label>
+
+      <section class="route-tabs" aria-label="路线类型">
+        <button class="active" type="button" data-route-tab="跨国路线">跨国路线</button>
+        <button type="button" data-route-tab="单国城市路线">单国城市路线</button>
+      </section>
+
+      <section class="route-chips" aria-label="路线筛选">
+        <button class="active" type="button" data-route-filter="全部">全部</button>
+        <button type="button" data-route-filter="热门">热门</button>
+        <button type="button" data-route-filter="收藏">收藏</button>
+        <button type="button" data-route-filter="自然风光">自然风光</button>
+      </section>
+
+      <section class="route-list" aria-label="跨国路线列表" data-route-panel="跨国路线">
+        <button class="route-card" type="button" data-route-name="北欧极光线" data-route-kind="跨国路线" data-route-tags="热门 自然风光 收藏" data-route-detail="route-nordic.html">
+          <img src="assets/route-nordic-cover.svg" alt="北欧极光线封面图" />
+          <span class="route-copy">
+            <strong>北欧极光线</strong>
+            <em>挪威 · 冰岛 · 芬兰</em>
+            <small>8天 · 3国</small>
+            <small>1286 人收藏</small>
+          </span>
+          <span class="route-ring" style="--route-index: 60"><b>60%</b></span>
+        </button>
+
+        <button class="route-card" type="button" data-route-name="中亚五国环线" data-route-kind="跨国路线" data-route-tags="文化历史">
+          <img src="assets/route-central-asia-cover.svg" alt="中亚五国环线封面图" />
+          <span class="route-copy">
+            <strong>中亚五国环线</strong>
+            <em>哈萨克斯坦 · 乌兹别克斯坦 · 吉尔吉斯斯坦</em>
+            <small>12天 · 5国</small>
+            <small>856 人收藏</small>
+          </span>
+          <span class="route-ring" style="--route-index: 30"><b>30%</b></span>
+        </button>
+
+        <button class="route-card" type="button" data-route-name="东南亚经典线" data-route-kind="跨国路线" data-route-tags="热门 自然风光">
+          <img src="assets/route-southeast-asia-cover.svg" alt="东南亚经典线封面图" />
+          <span class="route-copy">
+            <strong>东南亚经典线</strong>
+            <em>泰国 · 越南 · 柬埔寨</em>
+            <small>10天 · 3国</small>
+            <small>2250 人收藏</small>
+          </span>
+          <span class="route-ring" style="--route-index: 80"><b>80%</b></span>
+        </button>
+      </section>
+
+      <section class="route-single-section" aria-label="单国城市路线推荐" data-route-panel="单国城市路线">
+        <h2>单国城市路线推荐</h2>
+        <button class="route-card" type="button" data-route-name="日本关西线" data-route-kind="单国城市路线" data-route-tags="热门 文化历史">
+          <img src="assets/route-kansai-cover.svg" alt="日本关西线封面图" />
+          <span class="route-copy">
+            <strong>日本关西线</strong>
+            <em>东京 · 京都 · 大阪 · 奈良</em>
+            <small>7天 · 4城</small>
+            <small>930 人收藏</small>
+          </span>
+          <span class="route-ring" style="--route-index: 75"><b>75%</b></span>
+        </button>
+      </section>
+
+      <bottom-tab-bar active="路线"></bottom-tab-bar>
+    </main>
+  </body>
+</html>

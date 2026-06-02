@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="瑞典封面">
+  <rect width="240" height="160" fill="#98bdd1"/>
+  <rect x="20" y="66" width="42" height="62" fill="#c95e45"/>
+  <rect x="70" y="50" width="44" height="78" fill="#d88b44"/>
+  <rect x="122" y="62" width="42" height="66" fill="#b64039"/>
+  <rect x="172" y="46" width="38" height="82" fill="#dca64e"/>
+  <path d="M0 126h240v34H0Z" fill="#1a2d32" opacity=".65"/>
+  <path d="M20 66l21-20 21 20H20ZM70 50l22-19 22 19H70ZM122 62l21-18 21 18h-42ZM172 46l19-18 19 18h-38Z" fill="#24414c"/>
+</svg>

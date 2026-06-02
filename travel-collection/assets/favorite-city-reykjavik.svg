@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="雷克雅未克城市封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#b8d9ef"/>
+      <stop offset=".64" stop-color="#e4eef2"/>
+      <stop offset="1" stop-color="#d7e0e3"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" fill="url(#sky)"/>
+  <path d="M0 106 43 57l37 39 32-27 48 53v38H0Z" fill="#b9c8d0"/>
+  <path d="M43 57 59 82l-27-12Z" fill="#f4f5f1"/>
+  <path d="M82 125 121 69l39 59v32H73Z" fill="#cdd8de"/>
+  <path d="M121 69 136 95l-25-11Z" fill="#f7f8f4"/>
+  <path d="M0 128c34-13 64-5 93-11 31-7 50-4 67 1v42H0Z" fill="#edf1ec"/>
+  <path d="M92 81a21 21 0 0 1 42 0v50H92Z" fill="#f4f6f1"/>
+  <path d="M92 81a21 21 0 0 1 42 0Z" fill="#2c78af"/>
+  <rect x="108" y="35" width="6" height="48" fill="#2c78af"/>
+  <rect x="105" y="29" width="12" height="8" fill="#2c78af"/>
+  <path d="M0 142c45-8 88-4 160-14v32H0Z" fill="#dfe8e4"/>
+</svg>

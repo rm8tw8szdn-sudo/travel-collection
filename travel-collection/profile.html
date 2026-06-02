@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>我的</title>
+    <link rel="stylesheet" href="mobile.css" />
+    <script src="home-components.js" defer></script>
+    <script src="profile.js" defer></script>
+    <script src="app-shared.js" defer></script>
+  </head>
+  <body>
+    <main class="home-screen profile-screen" aria-label="我的">
+      <header class="profile-header">
+        <h1>我的</h1>
+      </header>
+
+      <section class="profile-card" aria-label="个人资料">
+        <button class="profile-person" type="button" data-profile-edit>
+          <img src="assets/home-mascot-placeholder.svg" alt="Ruby 的小宠物头像" />
+          <span>
+            <strong>Ruby</strong>
+            <em>旅行是我热爱的生活方式。</em>
+          </span>
+        </button>
+
+        <div class="profile-stats" aria-label="旅行统计">
+          <span><em>已点亮国家</em><strong>11</strong></span>
+          <span><em>已点亮城市</em><strong>27</strong></span>
+          <span><em>足迹地点</em><strong>45</strong></span>
+          <span><em>探索进度</em><strong>11%</strong></span>
+        </div>
+      </section>
+
+      <section class="profile-section profile-footprint" aria-label="我的足迹">
+        <div class="profile-section-head">
+          <h2>我的足迹</h2>
+          <button type="button" data-footprint-page>查看时间轴 <span aria-hidden="true">›</span></button>
+        </div>
+        <button class="profile-map-card" type="button" data-footprint-page>
+          <img src="assets/profile-world-map.svg" alt="浅绿色世界地图" />
+        </button>
+      </section>
+
+      <section class="profile-section profile-achievements" aria-label="我的成就">
+        <div class="profile-section-head">
+          <h2>我的成就</h2>
+          <button type="button" data-profile-link="achievements">查看全部 <span aria-hidden="true">›</span></button>
+        </div>
+        <div class="profile-badges">
+          <button type="button" data-profile-link="badge-country">
+            <img src="assets/profile-badge-country.svg" alt="10 个国家徽章" />
+            <span>10 个国家</span>
+          </button>
+          <button type="button" data-profile-link="badge-first">
+            <img src="assets/profile-badge-first.svg" alt="第一次出国徽章" />
+            <span>第一次出国</span>
+          </button>
+          <button type="button" data-profile-link="badge-continent">
+            <img src="assets/profile-badge-continent.svg" alt="跨越大陆徽章" />
+            <span>跨越大陆</span>
+          </button>
+          <button type="button" data-profile-link="badge-nature">
+            <img src="assets/profile-badge-nature.svg" alt="自然探险家徽章" />
+            <span>自然探险家</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="profile-menu" aria-label="设置入口">
+        <button type="button" data-favorites-page>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19.2S5.2 15.1 5.2 9.9A3.7 3.7 0 0 1 12 7.8a3.7 3.7 0 0 1 6.8 2.1c0 5.2-6.8 9.3-6.8 9.3Z"></path></svg>
+          <span>我的收藏</span>
+          <em>›</em>
+        </button>
+        <button type="button" data-profile-link="profile">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.1a3.8 3.8 0 1 0 0-7.6 3.8 3.8 0 0 0 0 7.6Z"></path><path d="M5.5 20c.8-3.2 3-5 6.5-5s5.7 1.8 6.5 5"></path></svg>
+          <span>个人资料</span>
+          <em>›</em>
+        </button>
+        <button type="button" data-profile-link="settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4Z"></path><path d="M12 3.8v2M12 18.2v2M4.2 12h2M17.8 12h2M6.5 6.5l1.4 1.4M16.1 16.1l1.4 1.4M17.5 6.5l-1.4 1.4M7.9 16.1l-1.4 1.4"></path></svg>
+          <span>设置</span>
+          <em>›</em>
+        </button>
+        <button type="button" data-profile-link="backup">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h9l3 3v11H6Z"></path><path d="M14 5v4h4M8.5 14h7M8.5 17h5"></path></svg>
+          <span>数据备份与导出</span>
+          <em>›</em>
+        </button>
+      </section>
+
+      <bottom-tab-bar active="我的"></bottom-tab-bar>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="希腊蓝白小镇封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#b7d4eb"/>
+      <stop offset=".72" stop-color="#ead7c3"/>
+      <stop offset="1" stop-color="#b9c7d4"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#4d8eb6"/>
+      <stop offset="1" stop-color="#2f668f"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="160" fill="url(#sky)"/>
+  <circle cx="38" cy="38" r="20" fill="#f3c391" opacity=".75"/>
+  <path d="M0 106c43-10 75-4 106-8 52-7 91-20 134-11v73H0Z" fill="url(#sea)"/>
+  <path d="M0 105 48 64l32 31 36-23 38 28 45-34 41 43v51H0Z" fill="#d8dce1"/>
+  <path d="M12 112h50v48H12zM58 101h48v59H58zM103 116h42v44h-42zM145 96h52v64h-52z" fill="#f7f6f1"/>
+  <path d="M82 92a20 20 0 0 1 40 0v11H82Z" fill="#2a78ad"/>
+  <rect x="82" y="102" width="40" height="16" fill="#f7f6f1"/>
+  <path d="M148 96h49l-24-23Z" fill="#2f7eb7"/>
+  <path d="M13 112h49l-22-18Z" fill="#f4f4ef"/>
+  <path d="M0 138c45-12 98-7 137-21 39-13 72-6 103-4v47H0Z" fill="#efe5d7" opacity=".82"/>
+</svg>

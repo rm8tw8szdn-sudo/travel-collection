@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>北欧极光之旅 · 路线详情</title>
+    <link rel="stylesheet" href="mobile.css" />
+    <script src="home-components.js" defer></script>
+    <script src="app-shared.js" defer></script>
+    <script src="route-detail.js" defer></script>
+  </head>
+  <body>
+    <main class="home-screen route-detail-screen" aria-label="北欧极光之旅路线详情">
+      <status-bar></status-bar>
+
+      <header class="route-detail-top" aria-label="路线详情操作">
+        <button class="route-detail-icon" type="button" aria-label="返回路线列表" data-route-back>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"></path></svg>
+        </button>
+        <div>
+          <button class="route-detail-icon" type="button" aria-label="收藏路线" data-route-favorite aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19.2S5.2 15.1 5.2 9.9A3.7 3.7 0 0 1 12 7.8a3.7 3.7 0 0 1 6.8 2.1c0 5.2-6.8 9.3-6.8 9.3Z"></path></svg>
+          </button>
+          <button class="route-detail-icon" type="button" aria-label="分享路线" data-route-share>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a3 3 0 1 0-2.7-1.7L8.8 10a3 3 0 1 0 0 4l6.5 3.7A3 3 0 1 0 16 16"></path></svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="route-detail-hero" aria-label="北欧极光封面">
+        <img src="assets/route-detail-hero-nordic.svg" alt="北欧极光雪山湖泊小镇" />
+        <span>1/6</span>
+      </section>
+
+      <section class="route-detail-content">
+        <section class="route-detail-title">
+          <h1>北欧极光之旅</h1>
+          <h2>挪威 · 瑞典 · 芬兰</h2>
+          <p>在北欧追逐极光，探索峡湾、冰雪森林与童话小镇，体验纯净自然与北欧风情。</p>
+        </section>
+
+        <section class="route-detail-summary" aria-label="路线核心信息">
+          <span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v3M17 4v3M5.2 8.2h13.6"></path><rect x="4.2" y="5.8" width="15.6" height="14" rx="3"></rect></svg>
+            <em>建议天数</em>
+            <strong>8-12天</strong>
+          </span>
+          <span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 4c-7.2.4-11.4 4.6-12.6 12.6C14.4 15.4 18.6 11.2 19 4Z"></path><path d="M6.5 16.5 4 19"></path></svg>
+            <em>最佳季节</em>
+            <strong>11月-3月</strong>
+          </span>
+          <span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2"></path><rect x="5" y="10" width="14" height="10" rx="2"></rect></svg>
+            <em>预算等级</em>
+            <strong>中高</strong>
+          </span>
+        </section>
+
+        <section class="route-detail-section" data-route-countries aria-label="包含国家">
+          <h2>包含国家</h2>
+          <div class="route-country-grid">
+            <a class="route-country-card" href="country-japan.html#country-NO" data-country-link="NO">
+              <img src="assets/route-country-norway.svg" alt="挪威封面" />
+              <span></span>
+              <strong><b>🇳🇴</b> 挪威</strong>
+              <em>Norway</em>
+            </a>
+            <a class="route-country-card" href="country-japan.html#country-SE" data-country-link="SE">
+              <img src="assets/route-country-sweden.svg" alt="瑞典封面" />
+              <span></span>
+              <strong><b>🇸🇪</b> 瑞典</strong>
+              <em>Sweden</em>
+            </a>
+            <a class="route-country-card" href="country-japan.html#country-FI" data-country-link="FI">
+              <img src="assets/route-country-finland.svg" alt="芬兰封面" />
+              <span></span>
+              <strong><b>🇫🇮</b> 芬兰</strong>
+              <em>Finland</em>
+            </a>
+          </div>
+        </section>
+
+        <section class="route-detail-section" data-route-cities aria-label="推荐城市">
+          <h2>推荐城市</h2>
+          <div class="route-city-grid">
+            <a class="route-city-card" href="city-oslo.html" data-city-link="oslo"><img src="assets/route-city-oslo.svg" alt="奥斯陆封面" /><span></span><strong>奥斯陆</strong><em>挪威</em></a>
+            <a class="route-city-card" href="city-oslo.html#stockholm" data-city-link="stockholm"><img src="assets/route-city-stockholm.svg" alt="斯德哥尔摩封面" /><span></span><strong>斯德哥尔摩</strong><em>瑞典</em></a>
+            <a class="route-city-card" href="city-oslo.html#helsinki" data-city-link="helsinki"><img src="assets/route-city-helsinki.svg" alt="赫尔辛基封面" /><span></span><strong>赫尔辛基</strong><em>芬兰</em></a>
+            <a class="route-city-more" href="city-oslo.html#more"><strong>+3</strong><span>更多城市</span></a>
+          </div>
+        </section>
+
+        <section class="route-detail-section" data-route-highlights aria-label="路线亮点">
+          <h2>路线亮点</h2>
+          <div class="route-highlight-grid">
+            <article><svg viewBox="0 0 24 24"><path d="M12 3l2.3 5 5.2-1.5-2.2 5 4 3.8-5.5.6-.8 5.4-4-3.8-4.7 2.8.8-5.4-5-2.4 4.7-2.8L6.6 4.2Z"></path></svg><span><strong>追寻极光</strong><em>在极光带最佳位置，邂逅绚丽极光</em></span></article>
+            <article><svg viewBox="0 0 24 24"><path d="M4 17 9 8l4 6 3-4 4 7H4Z"></path><path d="M9 8l2 3"></path></svg><span><strong>峡湾与自然</strong><em>挪威峡湾、冰川与雪山的壮丽景观</em></span></article>
+            <article><svg viewBox="0 0 24 24"><path d="M5 20V9l7-5 7 5v11H5Z"></path><path d="M9 20v-6h6v6"></path></svg><span><strong>童话城市</strong><em>北欧经典城市，感受北欧风情与历史</em></span></article>
+            <article><svg viewBox="0 0 24 24"><path d="M12 3v18M5 7l14 10M19 7 5 17"></path></svg><span><strong>冰雪体验</strong><em>雪地活动、狗拉雪橇、冰酒店等独特体验</em></span></article>
+          </div>
+        </section>
+
+        <section class="route-detail-section route-related-section" aria-label="相关路线">
+          <div class="route-section-head"><h2>相关路线</h2><a href="routes.html">查看更多 ›</a></div>
+          <div class="route-related-list">
+            <a href="route-nordic.html#nordic-winter" data-related-route="nordic-winter"><img src="assets/route-nordic-cover.svg" alt="" /><span><strong>北欧冬季秘境</strong><em>10天 · 挪威/瑞典/芬兰</em></span></a>
+            <a href="route-nordic.html#finland-story" data-related-route="finland-story"><img src="assets/route-city-helsinki.svg" alt="" /><span><strong>芬兰童话之旅</strong><em>6天 · 芬兰</em></span></a>
+            <a href="route-nordic.html#norway-fjord" data-related-route="norway-fjord"><img src="assets/route-country-norway.svg" alt="" /><span><strong>挪威峡湾之旅</strong><em>7天 · 挪威</em></span></a>
+          </div>
+        </section>
+      </section>
+
+    </main>
+  </body>
+</html>

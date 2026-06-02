@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 150" role="img" aria-label="中亚大环线路线封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#7fc5e3"/>
+      <stop offset=".58" stop-color="#d2c29c"/>
+      <stop offset="1" stop-color="#86683f"/>
+    </linearGradient>
+  </defs>
+  <rect width="220" height="150" fill="url(#sky)"/>
+  <circle cx="48" cy="42" r="17" fill="#e2a05d" opacity=".7"/>
+  <path d="M0 111c45-18 79-7 119-15 42-8 74-3 101 7v47H0Z" fill="#8d6d42"/>
+  <path d="M35 100h64v50H35Z" fill="#b77439"/>
+  <path d="M108 87h74v63h-74Z" fill="#a86835"/>
+  <path d="M42 86a25 25 0 0 1 50 0v14H42Z" fill="#2d9abe"/>
+  <path d="M120 72a26 26 0 0 1 52 0v16h-52Z" fill="#2f93b8"/>
+  <path d="M28 104h77M101 91h90" stroke="#e4bf7a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M49 115h11v35H49zM75 115h11v35H75zM123 103h11v47h-11zM151 103h11v47h-11z" fill="#5c4633"/>
+</svg>

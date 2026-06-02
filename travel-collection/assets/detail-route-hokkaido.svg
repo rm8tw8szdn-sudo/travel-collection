@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 82" role="img" aria-label="北海道之旅">
+  <rect width="160" height="82" fill="#94badf"/>
+  <circle cx="24" cy="18" r="12" fill="#eac6aa"/>
+  <path d="M0 55c25-20 51-25 82-14 29 10 51 5 78-11v52H0Z" fill="#415c6f"/>
+  <path d="M13 60 60 18l44 42Z" fill="#293d59"/>
+  <path d="M60 18 75 60H13Z" fill="#59738b"/>
+  <path d="M92 61 122 30l32 31Z" fill="#263648"/>
+  <path d="m52 26 8-8 10 15c-7-3-12-4-18-7Z" fill="#fff7ef"/>
+  <path d="M0 67c43-11 78-6 160-12v27H0Z" fill="#1b292a"/>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="罗马城市封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#bdd8e9"/>
+      <stop offset=".58" stop-color="#ead1b8"/>
+      <stop offset="1" stop-color="#9d7d68"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" fill="url(#sky)"/>
+  <circle cx="124" cy="35" r="16" fill="#e8b779" opacity=".62"/>
+  <ellipse cx="83" cy="105" rx="60" ry="34" fill="#9b765c"/>
+  <ellipse cx="83" cy="106" rx="46" ry="24" fill="#d0a57a"/>
+  <path d="M24 86c22-17 94-17 116 0v48H24Z" fill="#b18463"/>
+  <path d="M27 93c24-15 89-15 111 0" stroke="#e0bd8b" stroke-width="4" fill="none"/>
+  <g fill="#6c5145">
+    <path d="M36 101h10v22H36zM59 98h11v25H59zM82 97h11v26H82zM105 98h11v25h-11zM128 101h9v22h-9z"/>
+  </g>
+  <path d="M23 126h117v34H23Z" fill="#7b5a4a"/>
+</svg>

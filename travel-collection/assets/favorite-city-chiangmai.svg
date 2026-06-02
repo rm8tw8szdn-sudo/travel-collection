@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="清迈城市封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#b7d8e4"/>
+      <stop offset=".64" stop-color="#e4c09a"/>
+      <stop offset="1" stop-color="#778261"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" fill="url(#sky)"/>
+  <circle cx="126" cy="36" r="19" fill="#e9bc8d" opacity=".7"/>
+  <path d="M0 118c28-20 57-11 82-22 28-13 53-8 78 2v62H0Z" fill="#5b744e"/>
+  <path d="M32 88h82v58H32Z" fill="#8b5f39"/>
+  <path d="M22 91 73 42l52 49H22Z" fill="#b37c3f"/>
+  <path d="M70 38h9v108h-9Z" fill="#6e4c33"/>
+  <path d="M73 24 87 54H59Z" fill="#d6a350"/>
+  <path d="M40 112h12v34H40zM67 112h16v34H67zM101 112h12v34h-12z" fill="#49352c"/>
+  <path d="M0 135c37-10 70-4 102-13 26-7 44-3 58 2v36H0Z" fill="#4f6548" opacity=".8"/>
+</svg>

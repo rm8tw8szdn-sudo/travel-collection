@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 690 320" role="img" aria-label="北欧极光雪山湖泊小镇封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#061320"/>
+      <stop offset=".42" stop-color="#153044"/>
+      <stop offset=".72" stop-color="#0e2631"/>
+      <stop offset="1" stop-color="#071520"/>
+    </linearGradient>
+    <linearGradient id="auroraA" x1=".12" x2=".9" y1=".05" y2=".45">
+      <stop stop-color="#3ac27e" stop-opacity=".02"/>
+      <stop offset=".28" stop-color="#87f28f" stop-opacity=".88"/>
+      <stop offset=".56" stop-color="#d2f471" stop-opacity=".76"/>
+      <stop offset=".84" stop-color="#46bf83" stop-opacity=".3"/>
+      <stop offset="1" stop-color="#2d846a" stop-opacity=".04"/>
+    </linearGradient>
+    <linearGradient id="auroraB" x1=".04" x2=".86" y1=".2" y2=".44">
+      <stop stop-color="#60d891" stop-opacity=".02"/>
+      <stop offset=".34" stop-color="#9df5a1" stop-opacity=".48"/>
+      <stop offset=".74" stop-color="#6ddc8c" stop-opacity=".3"/>
+      <stop offset="1" stop-color="#1f6f67" stop-opacity=".02"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#173442"/>
+      <stop offset=".48" stop-color="#0b2230"/>
+      <stop offset="1" stop-color="#06121b"/>
+    </linearGradient>
+    <linearGradient id="vignette" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#000" stop-opacity="0"/>
+      <stop offset=".72" stop-color="#000" stop-opacity=".16"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".36"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="9"/>
+    </filter>
+  </defs>
+  <rect width="690" height="320" fill="url(#sky)"/>
+  <g opacity=".42">
+    <circle cx="72" cy="45" r="1.5" fill="#d9f4ff"/>
+    <circle cx="142" cy="30" r="1" fill="#d9f4ff"/>
+    <circle cx="210" cy="58" r="1.2" fill="#e8fbff"/>
+    <circle cx="472" cy="35" r="1" fill="#e8fbff"/>
+    <circle cx="595" cy="63" r="1.4" fill="#d9f4ff"/>
+    <circle cx="632" cy="29" r="1" fill="#f8ffff"/>
+  </g>
+  <path d="M78 82c98-58 167-8 264-28 88-18 139-42 248 26-111 17-165-9-254 9-104 21-185-2-258-7Z" fill="url(#auroraA)" filter="url(#soft)" opacity=".96"/>
+  <path d="M48 101c123-38 196 7 321-11 68-10 111-3 178 32-88-1-128-22-215-5-113 21-205-5-284-16Z" fill="url(#auroraB)" opacity=".82"/>
+  <path d="M0 170 73 88l70 78 70-61 89 95H0Z" fill="#132737"/>
+  <path d="M48 106 73 88l37 41-23-8-20 8Z" fill="#e9f0ef"/>
+  <path d="M300 194 414 62l121 133 64-55 91 83v97H300Z" fill="#1d3442"/>
+  <path d="M414 62 458 140l-66-28Z" fill="#edf3f2"/>
+  <path d="M535 195 599 140l48 44-65-17Z" fill="#dfe9ea"/>
+  <rect y="178" width="690" height="142" fill="url(#water)"/>
+  <path d="M0 200c85-17 139-6 215-7 76-1 127-23 213-18 73 5 120 23 262 5v45H0Z" fill="#091a25" opacity=".54"/>
+  <path d="M0 235c92-12 167 6 260 0 81-6 128-26 221-13 72 10 124 20 209 6v92H0Z" fill="#06111a" opacity=".5"/>
+  <path d="M384 173h24v31h-24zM421 164h30v40h-30zM463 181h24v23h-24zM516 169h35v35h-35zM575 182h28v22h-28z" fill="#f3bd61"/>
+  <path d="M382 173 396 158l17 15h-31ZM421 164l16-18 18 18h-34ZM516 169l17-19 20 19h-37ZM575 182l14-15 17 15h-31Z" fill="#6c4b2d"/>
+  <g opacity=".42">
+    <path d="M386 208h22v15h-22zM424 207h28v18h-28zM516 208h34v16h-34z" fill="#d4953d"/>
+    <path d="M384 232c22 4 42 3 64-2M512 229c29 3 55 2 83-4" stroke="#f2b65e" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <rect width="690" height="320" fill="url(#vignette)"/>
+</svg>

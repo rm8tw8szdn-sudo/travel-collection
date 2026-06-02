@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 150" role="img" aria-label="东非 Safari 路线封面">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#d7d4ba"/>
+      <stop offset=".58" stop-color="#dca65f"/>
+      <stop offset="1" stop-color="#906234"/>
+    </linearGradient>
+  </defs>
+  <rect width="220" height="150" fill="url(#sky)"/>
+  <circle cx="42" cy="38" r="20" fill="#e0a157" opacity=".78"/>
+  <path d="M0 105c41-20 70-10 103-16 45-8 84-3 117 8v53H0Z" fill="#a0723c"/>
+  <path d="M148 43c-18 28-20 60-5 96" stroke="#4f3f2e" stroke-width="6" stroke-linecap="round"/>
+  <path d="M126 62c28-11 48-9 61 6-28 9-48 7-61-6ZM119 84c22 0 41 8 57 24-26 3-47-5-57-24Z" fill="#4f6740"/>
+  <path d="M34 105h39c9 0 17 7 17 16v12H50c-10 0-18-8-18-18v-10Z" fill="#5c4b37"/>
+  <circle cx="48" cy="134" r="5" fill="#312a22"/>
+  <circle cx="78" cy="134" r="5" fill="#312a22"/>
+  <path d="M89 115c14-3 23 1 29 12" stroke="#5c4b37" stroke-width="6" stroke-linecap="round"/>
+  <path d="M0 132c55-9 101-1 220-13v31H0Z" fill="#78572e"/>
+</svg>
