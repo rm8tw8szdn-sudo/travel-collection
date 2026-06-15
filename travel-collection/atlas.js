@@ -101,13 +101,33 @@ function sortCountriesByPriority(items) {
   });
 }
 
-function renderAtlasCard(item) {
+function cardImageSrc(src) {
+  if (!src || !/^https:\/\/images\.unsplash\.com\//.test(src)) return src;
+  try {
+    const url = new URL(src);
+    url.searchParams.set("auto", "format");
+    url.searchParams.set("fit", "crop");
+    url.searchParams.set("w", "560");
+    url.searchParams.set("q", "62");
+    return url.toString();
+  } catch (error) {
+    return src;
+  }
+}
+
+function cardImageAttrs(index) {
+  const isLeadImage = index < 2;
+  return `loading="${isLeadImage ? "eager" : "lazy"}" decoding="async"${isLeadImage ? ' fetchpriority="high"' : ""}`;
+}
+
+function renderAtlasCard(item, index = 0) {
   const status = statusLabels[item.status] || "未探索";
   const statusClass = item.status === "explored" ? "explored" : item.status === "planned" ? "planned" : "";
   const subtitle = item.type === "city" ? `${item.parentName} · ${item.typeLabel}` : item.typeLabel;
+  const cover = cardImageSrc(item.cover);
   return `
     <button class="atlas-country-card atlas-place-card" type="button" data-atlas-item="${item.id}" data-atlas-type="${item.type}" data-href="${item.href}">
-      <img src="${item.cover}" alt="${item.name}封面图" />
+      <img src="${cover}" alt="${item.name}封面图" ${cardImageAttrs(index)} />
       <span class="atlas-card-shade"></span>
       <span class="atlas-place-type">${subtitle}</span>
       <span class="atlas-country-name">${item.name}</span>

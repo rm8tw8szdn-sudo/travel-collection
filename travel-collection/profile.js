@@ -16,8 +16,12 @@ document.querySelectorAll("[data-footprint-page]").forEach((button) => {
   });
 });
 
-const DEFAULT_PROFILE_AVATAR = "assets/profile-avatar-kuma.png";
-const LEGACY_PROFILE_AVATARS = new Set(["assets/home-mascot-placeholder.svg"]);
+const DEFAULT_PROFILE_AVATAR = "assets/profile-avatar-kuma-small.jpg";
+const LEGACY_PROFILE_AVATARS = new Set([
+  "assets/home-mascot-placeholder.svg",
+  "assets/profile-avatar-kuma.png",
+]);
+const MAX_INLINE_AVATAR_LENGTH = 360000;
 const PROFILE_EDIT_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l11-11-4-4L4 16v4Z"></path><path d="m13 7 4 4"></path></svg>`;
 
 function readTravelState() {
@@ -32,16 +36,32 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;");
 }
 
+function resolveProfileAvatar(avatar) {
+  if (!avatar || LEGACY_PROFILE_AVATARS.has(avatar)) return DEFAULT_PROFILE_AVATAR;
+  if (String(avatar).startsWith("data:image/") && String(avatar).length > MAX_INLINE_AVATAR_LENGTH) {
+    return DEFAULT_PROFILE_AVATAR;
+  }
+  return avatar;
+}
+
+function useDefaultAvatarOnError(image) {
+  image.addEventListener("error", () => {
+    if (image.src.includes(DEFAULT_PROFILE_AVATAR)) return;
+    image.src = DEFAULT_PROFILE_AVATAR;
+  });
+}
+
 function hydrateProfileStats() {
   const state = readTravelState();
   const statsData = window.TravelState?.getTravelStats?.(state) || {};
   const profileName = document.querySelector(".profile-person strong");
   const profileAvatar = document.querySelector(".profile-person img");
-  const avatar = state.userProfile?.avatar && !LEGACY_PROFILE_AVATARS.has(state.userProfile.avatar)
-    ? state.userProfile.avatar
-    : DEFAULT_PROFILE_AVATAR;
+  const avatar = resolveProfileAvatar(state.userProfile?.avatar);
   if (profileName) profileName.innerHTML = `${escapeHtml(state.userProfile?.nickname || "旅行者")} ${PROFILE_EDIT_ICON}`;
-  if (profileAvatar) profileAvatar.src = avatar;
+  if (profileAvatar) {
+    useDefaultAvatarOnError(profileAvatar);
+    profileAvatar.src = avatar;
+  }
   const stats = document.querySelectorAll(".profile-stats strong");
   if (stats[0]) stats[0].textContent = String(statsData.exploredCountryCount ?? 0);
   if (stats[1]) stats[1].textContent = String(statsData.exploredCityCount ?? 0);
@@ -79,7 +99,7 @@ function ensureAvatarInput(kind) {
 
 function openAvatarEditor() {
   const state = readTravelState();
-  const avatar = state.userProfile?.avatar || DEFAULT_PROFILE_AVATAR;
+  const avatar = resolveProfileAvatar(state.userProfile?.avatar);
   let modal = document.querySelector('[data-shared-root="avatar-editor"]');
   if (!modal) {
     modal = document.createElement("div");
@@ -90,7 +110,7 @@ function openAvatarEditor() {
     <div class="avatar-editor-overlay" data-avatar-editor-close>
       <section class="avatar-editor-sheet" role="dialog" aria-modal="true" aria-label="编辑头像">
         <div class="avatar-editor-handle" aria-hidden="true"></div>
-        <img src="${escapeHtml(avatar)}" alt="当前头像预览" />
+        <img src="${escapeHtml(avatar)}" alt="当前头像预览" decoding="async" />
         <div class="avatar-editor-actions">
           <button type="button" data-avatar-action="camera">${avatarActionIcon("camera")}<span>拍摄</span></button>
           <button type="button" data-avatar-action="album">${avatarActionIcon("album")}<span>从相册选择</span></button>
@@ -100,6 +120,8 @@ function openAvatarEditor() {
     </div>
   `;
   modal.hidden = false;
+  const preview = modal.querySelector(".avatar-editor-sheet > img");
+  if (preview) useDefaultAvatarOnError(preview);
   modal.querySelectorAll("[data-avatar-editor-close]").forEach((node) => {
     node.addEventListener("click", (event) => {
       if (event.target === node || event.currentTarget.classList.contains("avatar-editor-cancel")) modal.hidden = true;
@@ -121,7 +143,7 @@ function saveAvatarFile(file) {
   reader.addEventListener("load", () => {
     const image = new Image();
     image.addEventListener("load", () => {
-      const size = 512;
+      const size = 256;
       const canvas = document.createElement("canvas");
       canvas.width = size;
       canvas.height = size;
@@ -134,7 +156,7 @@ function saveAvatarFile(file) {
       context.fillStyle = "#ffffff";
       context.fillRect(0, 0, size, size);
       context.drawImage(image, left, top, width, height);
-      const avatar = canvas.toDataURL("image/jpeg", 0.88);
+      const avatar = canvas.toDataURL("image/jpeg", 0.72);
       window.TravelState?.updateTravelState?.((state) => ({
         ...state,
         userProfile: {

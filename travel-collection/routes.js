@@ -59,12 +59,32 @@ function buildRouteCards() {
     .map((route) => ({ route, state }));
 }
 
-function renderRouteCard({ route, state }) {
+function cardImageSrc(src) {
+  if (!src || !/^https:\/\/images\.unsplash\.com\//.test(src)) return src;
+  try {
+    const url = new URL(src);
+    url.searchParams.set("auto", "format");
+    url.searchParams.set("fit", "crop");
+    url.searchParams.set("w", "560");
+    url.searchParams.set("q", "62");
+    return url.toString();
+  } catch (error) {
+    return src;
+  }
+}
+
+function cardImageAttrs(index) {
+  const isLeadImage = index < 2;
+  return `loading="${isLeadImage ? "eager" : "lazy"}" decoding="async"${isLeadImage ? ' fetchpriority="high"' : ""}`;
+}
+
+function renderRouteCard({ route, state }, index = 0) {
   const places = routePlaceNames(route, state);
+  const cover = cardImageSrc(route.cover);
   return `
     <article class="route-card route-inspiration-card" data-route-card="${route.id}">
       <button class="route-card-main" type="button" data-route-open="${route.id}">
-        <img src="${route.cover}" alt="${route.name}封面图" />
+        <img src="${cover}" alt="${route.name}封面图" ${cardImageAttrs(index)} />
         <span class="route-copy">
           <strong>${route.name}</strong>
           <em>${places.summary}</em>

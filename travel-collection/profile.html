@@ -11,7 +11,7 @@
     <script src="travel-state.js?v=logic-state-20260607" defer></script>
     <script src="home-components.js?v=home-next-row-20260607" defer></script>
     <script src="world-map.js?v=profile-map-zoom-20260613" defer></script>
-    <script src="profile.js?v=profile-card-depth-20260614" defer></script>
+    <script src="profile.js?v=avatar-image-loading-20260615" defer></script>
     <script src="app-shared.js?v=logic-state-20260607" defer></script>
   </head>
   <body>
@@ -23,7 +23,7 @@
       <section class="profile-card" aria-label="个人资料">
         <div class="profile-person">
           <button class="profile-avatar-button" type="button" aria-label="编辑头像" data-profile-avatar-edit>
-            <img src="assets/profile-avatar-kuma.png" alt="Ruby 的小熊头像" />
+            <img src="assets/profile-avatar-kuma-small.jpg" alt="Ruby 的小熊头像" decoding="async" fetchpriority="high" />
             <i aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M4 8h4l2-2h4l2 2h4v11H4Z"></path><path d="M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path></svg>
             </i>

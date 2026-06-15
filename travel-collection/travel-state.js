@@ -302,7 +302,7 @@
     return {
       userProfile: {
         nickname: "Ruby",
-        avatar: "assets/profile-avatar-kuma.png",
+        avatar: "assets/profile-avatar-kuma-small.jpg",
       },
       countries: defaultData("DEFAULT_COUNTRIES", defaultCountries),
       cities: defaultData("DEFAULT_CITIES", defaultCities),
