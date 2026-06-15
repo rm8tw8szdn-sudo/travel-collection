@@ -67,24 +67,25 @@
 
   async function loadResources() {
     if (resourcesPromise) return resourcesPromise;
-    await ensureMapLibraries();
-    resourcesPromise = Promise.all([
-      fetch(MAP_TOPOLOGY_URL).then((response) => response.json()),
-      fetch(COUNTRY_META_URL).then((response) => response.json()),
-    ]).then(([topology, countryMeta]) => {
-      const numericByIso = Object.fromEntries(
-        countryMeta
-          .filter((item) => item.code && item.numeric)
-          .map((item) => [item.code, normalizeNumeric(item.numeric)]),
-      );
-      const metaByNumeric = Object.fromEntries(
-        countryMeta
-          .filter((item) => item.numeric)
-          .map((item) => [normalizeNumeric(item.numeric), item]),
-      );
-      const features = global.topojson.feature(topology, topology.objects.countries).features;
-      return { topology, features, numericByIso, metaByNumeric };
-    });
+    resourcesPromise = ensureMapLibraries()
+      .then(() => Promise.all([
+        fetch(MAP_TOPOLOGY_URL).then((response) => response.json()),
+        fetch(COUNTRY_META_URL).then((response) => response.json()),
+      ]))
+      .then(([topology, countryMeta]) => {
+        const numericByIso = Object.fromEntries(
+          countryMeta
+            .filter((item) => item.code && item.numeric)
+            .map((item) => [item.code, normalizeNumeric(item.numeric)]),
+        );
+        const metaByNumeric = Object.fromEntries(
+          countryMeta
+            .filter((item) => item.numeric)
+            .map((item) => [normalizeNumeric(item.numeric), item]),
+        );
+        const features = global.topojson.feature(topology, topology.objects.countries).features;
+        return { topology, features, numericByIso, metaByNumeric };
+      });
     return resourcesPromise;
   }
 
