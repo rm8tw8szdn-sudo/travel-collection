@@ -91,7 +91,7 @@
     "AU-SYD": photo("1500530855697-b586d89ba3ee"),
   };
   const ROUTE_PHOTOS = {
-    "nordic-aurora": REAL_PHOTOS.aurora,
+    "nordic-aurora": "assets/route-nordic-aurora-cover.svg",
     "japan-classic": "assets/country-landmark-japan.jpg",
     "japan-kansai": "assets/country-landmark-japan.jpg",
     "thai-chiangmai": "assets/country-landmark-thailand.jpg",

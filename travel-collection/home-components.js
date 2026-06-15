@@ -78,8 +78,8 @@ class StatCard extends HTMLElement {
             <span>${this.getAttribute("percent") || percent}</span>
           </div>
         </div>
-        <img class="home-map-asset" src="${this.getAttribute("map-src") || "assets/home-map-p2.png"}" alt="" />
-        <img class="home-mascot-asset" src="${this.getAttribute("mascot-src") || "assets/home-bear-mascot.png"}" alt="旅行熊吉祥物" />
+        <img class="home-map-asset" src="${this.getAttribute("map-src") || "assets/home-map-p2.webp"}" alt="" decoding="async" fetchpriority="high" />
+        <img class="home-mascot-asset" src="${this.getAttribute("mascot-src") || "assets/home-bear-mascot.webp"}" alt="旅行熊吉祥物" decoding="async" />
       </section>
     `;
     this.querySelector(".home-stat-card")?.addEventListener("click", () => {
@@ -100,7 +100,7 @@ class TripPreviewCard extends HTMLElement {
       <section class="home-next-section" aria-label="${this.getAttribute("label") || "下一目标"}">
         <h2>${this.getAttribute("label") || "下一目标"}</h2>
         <article class="home-next-card ${trip ? "" : "is-empty"}">
-          ${trip ? `<img class="home-next-cover" src="${this.getAttribute("cover-src") || cover}" alt="${this.getAttribute("cover-alt") || `${title}封面图`}" />` : `<span class="home-next-cover home-next-empty-cover" aria-hidden="true"></span>`}
+          ${trip ? `<img class="home-next-cover" src="${this.getAttribute("cover-src") || cover}" alt="${this.getAttribute("cover-alt") || `${title}封面图`}" loading="lazy" decoding="async" />` : `<span class="home-next-cover home-next-empty-cover" aria-hidden="true"></span>`}
           <div class="home-next-copy">
             <h3>${title}</h3>
             <p>${date}</p>
@@ -134,7 +134,7 @@ class RecentTripCard extends HTMLElement {
       <section class="home-recent-section" aria-label="最近旅程">
         <h2>${this.getAttribute("section-title") || "最近旅程"}</h2>
         <article class="home-recent-card ${trip ? "" : "is-empty"}">
-          ${trip ? `<img class="home-recent-cover" src="${this.getAttribute("cover-src") || cover}" alt="${this.getAttribute("cover-alt") || `${title}封面图`}" />` : `<span class="home-recent-cover home-recent-empty-cover" aria-hidden="true"></span>`}
+          ${trip ? `<img class="home-recent-cover" src="${this.getAttribute("cover-src") || cover}" alt="${this.getAttribute("cover-alt") || `${title}封面图`}" loading="lazy" decoding="async" />` : `<span class="home-recent-cover home-recent-empty-cover" aria-hidden="true"></span>`}
           <div class="home-recent-copy">
             <h3>${title}</h3>
             <p>${date}</p>
