@@ -4,74 +4,54 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>我的行程</title>
-    <link rel="stylesheet" href="mobile.css" />
-    <script src="home-components.js" defer></script>
-    <script src="trips.js" defer></script>
-    <script src="app-shared.js" defer></script>
+    <link rel="stylesheet" href="mobile.css?v=trip-budget-sheet-20260615" />
+    <script src="travel-data.js?v=route-accurate-media-20260615" defer></script>
+    <script src="travel-state.js?v=logic-state-20260607" defer></script>
+    <script src="home-components.js?v=home-next-row-20260607" defer></script>
+    <script src="trips.js?v=trip-budget-sheet-20260615" defer></script>
+    <script src="app-shared.js?v=logic-state-20260607" defer></script>
   </head>
   <body>
     <main class="home-screen trip-screen" aria-label="我的行程">
-      <status-bar></status-bar>
-
       <header class="trip-header">
         <h1>我的行程</h1>
         <button type="button" data-new-trip>+ 新建行程</button>
       </header>
 
       <section class="trip-tabs" aria-label="行程筛选">
-        <button class="active" type="button" data-trip-filter="全部">全部</button>
-        <button type="button" data-trip-filter="待出行">待出行</button>
-        <button type="button" data-trip-filter="已完成">已完成</button>
-        <button type="button" data-trip-filter="收藏">收藏</button>
+        <button class="active" type="button" data-trip-tab="upcoming">待出行</button>
+        <button type="button" data-trip-tab="completed">已完成</button>
       </section>
 
-      <section class="trip-section" aria-label="待出行">
-        <h2>待出行</h2>
-        <div class="trip-card-list" data-trip-list-upcoming>
-          <button class="trip-card" type="button" data-trip-name="北欧极光之旅" data-trip-status="待出行" data-share-card-trigger data-share-type="trip">
-            <img src="assets/trip-nordic-cover.svg" alt="北欧极光之旅封面图" />
-            <span class="trip-card-copy">
-              <strong>北欧极光之旅</strong>
-              <em>挪威 · 冰岛 · 芬兰</em>
-              <small>2026.07.18 - 07.30</small>
-              <small>12天 · 3国</small>
-            </span>
-            <span class="trip-status planning">规划中</span>
-          </button>
+      <label class="trip-day-search" aria-label="按天数搜索行程">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.8 18.2a7.4 7.4 0 1 1 0-14.8 7.4 7.4 0 0 1 0 14.8ZM16.2 16.2 21 21"></path></svg>
+        <input type="search" placeholder="按天数搜索，如 8天 / 5-8天" data-trip-day-search />
+      </label>
+      <p class="trip-search-summary" hidden data-trip-search-summary></p>
 
-          <button class="trip-card" type="button" data-trip-name="日本关西之旅" data-trip-status="待出行">
-            <img src="assets/trip-kansai-cover.svg" alt="日本关西之旅封面图" />
-            <span class="trip-card-copy">
-              <strong>日本关西之旅</strong>
-              <em>日本</em>
-              <small>2026.06.10 - 06.17</small>
-              <small>8天 · 4城</small>
-            </span>
-            <span class="trip-status preparing">准备中</span>
-          </button>
+      <section class="trip-section" aria-label="待出行" data-trip-panel="upcoming">
+        <div class="trip-filter-pills" aria-label="未来行程状态筛选" data-trip-filter="upcoming">
+          <button class="active" type="button" data-trip-filter-value="all">全部 <span>0</span></button>
+          <button type="button" data-trip-filter-value="planning">规划中 <span>0</span></button>
+          <button type="button" data-trip-filter-value="confirmed">已确认 <span>0</span></button>
         </div>
+        <div class="trip-card-list" data-trip-list="upcoming"></div>
       </section>
 
-      <section class="trip-section trip-completed" aria-label="已完成">
-        <h2>已完成</h2>
-        <div class="trip-card-list">
-          <button class="trip-card" type="button" data-trip-name="土耳其之旅" data-trip-status="已完成">
-            <img src="assets/trip-turkey-cover.svg" alt="土耳其之旅封面图" />
-            <span class="trip-card-copy">
-              <strong>土耳其之旅</strong>
-              <em>土耳其</em>
-              <small>2026.04.10 - 04.17</small>
-              <small>8天 · 3城</small>
-            </span>
-            <span class="trip-status done">已完成</span>
-          </button>
+      <section class="trip-section trip-completed" aria-label="已完成" data-trip-panel="completed" hidden>
+        <div class="trip-filter-pills trip-filter-wide" aria-label="已完成行程筛选" data-trip-filter="completed">
+          <button class="active" type="button" data-trip-filter-value="all">全部 <span>0</span></button>
+          <button type="button" data-trip-filter-value="this-year">今年</button>
+          <button type="button" data-trip-filter-value="2024">2024</button>
+          <button type="button" data-trip-filter-value="older">2023及以前</button>
         </div>
+        <div class="trip-card-list" data-trip-list="completed"></div>
       </section>
 
       <div class="trip-create-modal" hidden data-trip-modal>
         <section class="trip-create-panel" data-trip-step="1" aria-label="行程基本信息">
           <strong>行程基本信息</strong>
-          <label><span>行程名称（选填）</span><input type="text" value="北欧极光之旅" data-trip-name-input /></label>
+          <label><span>行程名称（选填）</span><input type="text" placeholder="例如 日本之旅" data-trip-name-input /></label>
           <label><span>出发日期</span><input type="text" value="2026.07.18" data-trip-start-input /></label>
           <label><span>结束日期</span><input type="text" value="2026.07.30" data-trip-end-input /></label>
           <label><span>备注（选填）</span><textarea rows="2" data-trip-note-input></textarea></label>
@@ -84,23 +64,25 @@
           <strong>添加国家 / 城市</strong>
           <label><span>搜索国家或城市</span><input type="text" placeholder="搜索国家或城市" data-place-search /></label>
           <div class="trip-selected-chips" aria-label="已选国家城市">
-            <button type="button" data-chip="挪威">挪威</button>
-            <button type="button" data-chip="冰岛">冰岛</button>
-            <button type="button" data-chip="芬兰">芬兰</button>
+            <button type="button" data-place-suggestion="日本">日本</button>
+            <button type="button" data-place-suggestion="东京">东京</button>
+            <button type="button" data-place-suggestion="京都">京都</button>
+            <button type="button" data-place-suggestion="大阪">大阪</button>
+            <button type="button" data-place-suggestion="挪威">挪威</button>
+            <button type="button" data-place-suggestion="冰岛">冰岛</button>
+            <button type="button" data-place-suggestion="芬兰">芬兰</button>
           </div>
           <button class="trip-add-more" type="button" data-add-place>+ 添加更多</button>
-          <div class="trip-selected-list">
-            <span>挪威 <button type="button" data-remove-place="挪威">×</button></span>
-            <span>冰岛 <button type="button" data-remove-place="冰岛">×</button></span>
-            <span>芬兰 <button type="button" data-remove-place="芬兰">×</button></span>
-          </div>
+          <div class="trip-selected-list"></div>
           <div class="trip-modal-actions">
+            <button class="secondary" type="button" data-close-trip-modal>关闭</button>
             <button class="secondary" type="button" data-trip-prev>上一步</button>
             <button type="button" data-trip-next>下一步</button>
           </div>
         </section>
         <section class="trip-create-panel" data-trip-step="3" hidden aria-label="完成确认">
           <strong>完成确认</strong>
+          <label><span>预计预算（可跳过）</span><input type="number" inputmode="numeric" placeholder="例如 12000" data-trip-budget-input /></label>
           <article class="trip-preview-card" data-trip-preview>
             <img src="assets/trip-nordic-cover.svg" alt="北欧极光之旅封面图" />
             <span>
@@ -111,11 +93,15 @@
             </span>
           </article>
           <div class="trip-modal-actions">
+            <button class="secondary" type="button" data-close-trip-modal>关闭</button>
             <button class="secondary" type="button" data-trip-prev>上一步</button>
             <button type="button" data-create-trip>创建行程</button>
           </div>
         </section>
       </div>
+
+      <div class="trip-create-modal trip-detail-modal" hidden data-trip-detail-modal></div>
+      <div class="trip-create-modal trip-detail-modal" hidden data-trip-budget-modal></div>
 
       <bottom-tab-bar active="行程"></bottom-tab-bar>
     </main>

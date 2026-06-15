@@ -4,10 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>我的</title>
-    <link rel="stylesheet" href="mobile.css" />
-    <script src="home-components.js" defer></script>
-    <script src="profile.js" defer></script>
-    <script src="app-shared.js" defer></script>
+    <link rel="stylesheet" href="mobile.css?v=profile-card-depth-20260614" />
+    <script src="vendor/d3.min.js" defer></script>
+    <script src="vendor/topojson-client.min.js" defer></script>
+    <script src="travel-data.js?v=country-city-gallery-20260614" defer></script>
+    <script src="travel-state.js?v=logic-state-20260607" defer></script>
+    <script src="home-components.js?v=home-next-row-20260607" defer></script>
+    <script src="world-map.js?v=profile-map-zoom-20260613" defer></script>
+    <script src="profile.js?v=profile-card-depth-20260614" defer></script>
+    <script src="app-shared.js?v=logic-state-20260607" defer></script>
   </head>
   <body>
     <main class="home-screen profile-screen" aria-label="我的">
@@ -16,18 +21,23 @@
       </header>
 
       <section class="profile-card" aria-label="个人资料">
-        <button class="profile-person" type="button" data-profile-edit>
-          <img src="assets/home-mascot-placeholder.svg" alt="Ruby 的小宠物头像" />
-          <span>
-            <strong>Ruby</strong>
+        <div class="profile-person">
+          <button class="profile-avatar-button" type="button" aria-label="编辑头像" data-profile-avatar-edit>
+            <img src="assets/profile-avatar-kuma.png" alt="Ruby 的小熊头像" />
+            <i aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 8h4l2-2h4l2 2h4v11H4Z"></path><path d="M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path></svg>
+            </i>
+          </button>
+          <button class="profile-person-copy" type="button" data-profile-edit>
+            <strong>Ruby <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l11-11-4-4L4 16v4Z"></path><path d="m13 7 4 4"></path></svg></strong>
             <em>旅行是我热爱的生活方式。</em>
-          </span>
-        </button>
+          </button>
+        </div>
 
         <div class="profile-stats" aria-label="旅行统计">
           <span><em>已点亮国家</em><strong>11</strong></span>
           <span><em>已点亮城市</em><strong>27</strong></span>
-          <span><em>足迹地点</em><strong>45</strong></span>
+          <span><em>收藏数量</em><strong>5</strong></span>
           <span><em>探索进度</em><strong>11%</strong></span>
         </div>
       </section>
@@ -37,9 +47,12 @@
           <h2>我的足迹</h2>
           <button type="button" data-footprint-page>查看时间轴 <span aria-hidden="true">›</span></button>
         </div>
-        <button class="profile-map-card" type="button" data-footprint-page>
-          <img src="assets/profile-world-map.svg" alt="浅绿色世界地图" />
-        </button>
+        <div class="profile-map-card" aria-label="我的足迹地图与时间轴">
+          <button class="profile-map-preview" type="button" aria-label="放大查看我的足迹地图" data-profile-map-open>
+            <span class="travel-world-map travel-world-map--profile" data-world-map data-world-map-mode="preview"></span>
+          </button>
+          <div class="profile-mini-timeline" aria-label="最近足迹时间轴" data-profile-timeline></div>
+        </div>
       </section>
 
       <section class="profile-section profile-achievements" aria-label="我的成就">
@@ -47,24 +60,11 @@
           <h2>我的成就</h2>
           <button type="button" data-profile-link="achievements">查看全部 <span aria-hidden="true">›</span></button>
         </div>
-        <div class="profile-badges">
-          <button type="button" data-profile-link="badge-country">
-            <img src="assets/profile-badge-country.svg" alt="10 个国家徽章" />
-            <span>10 个国家</span>
-          </button>
-          <button type="button" data-profile-link="badge-first">
-            <img src="assets/profile-badge-first.svg" alt="第一次出国徽章" />
-            <span>第一次出国</span>
-          </button>
-          <button type="button" data-profile-link="badge-continent">
-            <img src="assets/profile-badge-continent.svg" alt="跨越大陆徽章" />
-            <span>跨越大陆</span>
-          </button>
-          <button type="button" data-profile-link="badge-nature">
-            <img src="assets/profile-badge-nature.svg" alt="自然探险家徽章" />
-            <span>自然探险家</span>
-          </button>
-        </div>
+        <button class="profile-achievement-entry" type="button" data-profile-link="achievements">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v3a5 5 0 0 1-10 0Z"></path><path d="M9 14h6M10 20h4M12 14v6"></path><path d="M7 7H4.8a3 3 0 0 0 3 3M17 7h2.2a3 3 0 0 1-3 3"></path></svg>
+          <span>成就中心</span>
+          <i aria-hidden="true">›</i>
+        </button>
       </section>
 
       <section class="profile-menu" aria-label="设置入口">

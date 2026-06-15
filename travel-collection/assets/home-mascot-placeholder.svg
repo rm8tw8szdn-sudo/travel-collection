@@ -1,5 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 94 104" role="img" aria-label="小宠物图片占位">
-  <!-- TODO: replace exact mascot asset -->
   <defs>
     <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
       <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#48533d" flood-opacity=".24"/>

@@ -4,16 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>足迹</title>
-    <link rel="stylesheet" href="mobile.css" />
-    <script src="home-components.js" defer></script>
-    <script src="app-shared.js" defer></script>
-    <script src="footprint.js" defer></script>
+    <link rel="stylesheet" href="mobile.css?v=page-title-compact-20260613" />
+    <script src="vendor/d3.min.js" defer></script>
+    <script src="vendor/topojson-client.min.js" defer></script>
+    <script src="travel-data.js?v=country-city-gallery-20260614" defer></script>
+    <script src="travel-state.js?v=logic-state-20260607" defer></script>
+    <script src="home-components.js?v=home-next-row-20260607" defer></script>
+    <script src="app-shared.js?v=logic-state-20260607" defer></script>
+    <script src="world-map.js?v=real-map-20260613" defer></script>
+    <script src="footprint.js?v=real-map-20260613" defer></script>
   </head>
   <body>
     <main class="home-screen footprint-screen" aria-label="足迹">
-      <status-bar></status-bar>
-
       <header class="footprint-header">
+        <button class="footprint-back" type="button" aria-label="返回我的页" data-footprint-back>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"></path></svg>
+        </button>
         <div>
           <h1>足迹</h1>
           <p>已探索 <strong data-footprint-country-count>11</strong> 个国家 · <strong data-footprint-city-count>27</strong> 个城市</p>
@@ -29,8 +35,11 @@
       </header>
 
       <section class="footprint-map-card" aria-label="世界地图足迹">
-        <img class="footprint-map" src="assets/footprint-world-map.svg" alt="浅绿色世界足迹地图" data-footprint-map-asset />
-        <img class="footprint-pet" src="assets/favorite-route-pet.svg" alt="旅行收藏册小宠物" data-footprint-pet-asset />
+        <div class="travel-world-map travel-world-map--footprint footprint-map" data-world-map data-world-map-mode="detail"></div>
+        <div class="travel-world-map__legend" aria-hidden="true">
+          <span><i class="is-explored"></i>已探索</span>
+          <span><i></i>未探索</span>
+        </div>
         <article class="footprint-progress-card" data-footprint-progress>
           <header>
             <strong>探索进度</strong>
@@ -49,7 +58,7 @@
           <h2>最近旅程</h2>
           <button type="button" data-footprint-list="trips">查看全部 <span aria-hidden="true">›</span></button>
         </div>
-        <div class="footprint-timeline">
+        <div class="footprint-timeline" data-footprint-trip-list>
           <span class="footprint-timeline-line" aria-hidden="true"></span>
           <article class="footprint-trip-row" data-trip-detail="trip-japan">
             <time><strong>2026</strong><em>07</em></time>
@@ -73,7 +82,7 @@
             <time><strong>2025</strong><em>11</em></time>
             <i aria-hidden="true"></i>
             <button type="button">
-              <img src="assets/favorite-city-chiangmai.svg" alt="泰国旅程封面图" />
+              <img src="assets/country-landmark-thailand.jpg" alt="泰国旅程封面图" />
               <span><strong><b>🇹🇭</b> 泰国</strong><em>清迈</em></span>
               <small>2025.11</small>
             </button>
@@ -104,7 +113,7 @@
           <h2>我的成就</h2>
           <button type="button" data-footprint-list="achievements">查看全部 <span aria-hidden="true">›</span></button>
         </div>
-        <div class="footprint-achievement-grid">
+        <div class="footprint-achievement-grid" data-footprint-achievement-list>
           <button type="button" data-achievement="asia-first">
             <img src="assets/footprint-achievement-flag.svg" alt="亚洲第一国徽章" />
             <strong>亚洲第一国</strong>
@@ -123,7 +132,6 @@
             <em>探索 10 个国家</em>
             <small>2026.07.10</small>
           </button>
-          <img class="footprint-achievement-pet" src="assets/home-mascot-placeholder.svg" alt="" />
         </div>
       </section>
 

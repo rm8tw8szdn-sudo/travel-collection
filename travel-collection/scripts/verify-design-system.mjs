@@ -67,7 +67,7 @@ const missing = [
   ...requiredClasses.filter((marker) => !css.includes(marker)),
   ...requiredTokenUsage.filter((marker) => !css.includes(marker)),
   ...requiredDocs.filter((marker) => !docs.includes(marker)),
-  ...requiredAppUsage.filter((marker) => !fs.readFileSync(new URL("../mobile-app.js", import.meta.url), "utf8").includes(marker) && !css.includes(marker)),
+  ...requiredAppUsage.filter((marker) => !fs.readFileSync(new URL("../legacy/mobile-app.js", import.meta.url), "utf8").includes(marker) && !css.includes(marker)),
 ];
 
 if (missing.length) {

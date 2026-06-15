@@ -2,17 +2,149 @@ document.querySelector("[data-route-back]")?.addEventListener("click", () => {
   window.location.href = "routes.html";
 });
 
-document.querySelector("[data-route-favorite]")?.addEventListener("click", (event) => {
+const routeId = decodeURIComponent(window.location.hash.replace(/^#/, "")) || "nordic-aurora";
+const favoriteButton = document.querySelector("[data-route-favorite]");
+const addRouteButton = document.querySelector("[data-route-add-trip]");
+
+function readState() {
+  return window.TravelState?.readTravelState?.() || {};
+}
+
+function updateState(updater) {
+  return window.TravelState?.updateTravelState?.(updater) || {};
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function currentRoute(state = readState()) {
+  return state.routesById?.[routeId] || state.routesById?.["nordic-aurora"];
+}
+
+function routePlaceNames(route, state) {
+  return {
+    countries: (route.countryIds || []).map((id) => state.countriesById?.[id]?.name || id),
+    cities: (route.cityIds || []).map((id) => state.citiesById?.[id]?.name || id),
+  };
+}
+
+function routeRecommendation(route, places) {
+  const custom = {
+    iberia: "推荐语：从巴塞罗那的现代主义建筑到马德里的博物馆，再到里斯本的山城海风，适合把城市、美食和海岸放在一趟轻量西葡线里。",
+    "iberia-sunshine": "推荐语：西班牙与葡萄牙的老城、海岸阳光和慢节奏餐桌连在一起，适合春秋季做 9-12 天的西葡长一点路线。",
+    "spain-art-andalusia": "推荐语：巴塞罗那建筑、马德里博物馆和塞维利亚宫殿各有重点，适合想集中收集西班牙艺术与历史的人。",
+    "france-spain-art-coast": "推荐语：巴黎和南法提供博物馆与海岸，巴塞罗那、塞维利亚补上建筑和南欧城市感，适合艺术海岸主题。",
+    "nordic-aurora": "推荐语：把挪威峡湾、冰岛自然和芬兰冬季体验放在一起，适合第一次规划北欧极光主题旅行。",
+  };
+  if (custom[route.id]) return custom[route.id];
+  const cityText = places.cities.slice(0, 3).join("、");
+  const countryText = places.countries.slice(0, 3).join("、");
+  const themeText = (route.tags || []).slice(0, 3).join("、");
+  const placeText = route.kind === "单国城市路线" && cityText ? cityText : countryText;
+  return `推荐语：${placeText || route.name}围绕${themeText || "目的地特色"}展开，${route.reason || "适合按兴趣组合成一趟轻量路线。"}`;
+}
+
+function renderRouteDetailState() {
+  const state = readState();
+  const route = currentRoute(state);
+  if (!route) return;
+  const places = routePlaceNames(route, state);
+  document.title = `${route.name} · 路线详情`;
+  document.querySelector(".route-detail-screen")?.setAttribute("aria-label", `${route.name}路线详情`);
+  const hero = document.querySelector(".route-detail-hero img");
+  if (hero) {
+    hero.src = route.cover || "assets/home-aurora-cover.svg";
+    hero.alt = `${route.name}封面图`;
+  }
+  document.querySelector("[data-route-name]")?.replaceChildren(route.name);
+  document.querySelector("[data-route-places]")?.replaceChildren(route.kind === "单国城市路线" ? places.cities.join(" · ") : places.countries.join(" · "));
+  document.querySelector("[data-route-reason]")?.replaceChildren(routeRecommendation(route, places));
+  document.querySelector("[data-route-days]")?.replaceChildren(route.days || "待定");
+  document.querySelector("[data-route-season]")?.replaceChildren(route.season || "按季节");
+  document.querySelector("[data-route-budget]")?.replaceChildren(route.budgetLevel || "中等");
+  if (addRouteButton) addRouteButton.dataset.routeAddTrip = route.id;
+  favoriteButton?.classList.toggle("favorited", route.isFavorite);
+  favoriteButton?.setAttribute("aria-pressed", String(route.isFavorite));
+  renderCities(route, state);
+  renderHighlights(route);
+  renderRelated(route, state);
+}
+
+function renderCities(route, state) {
+  const section = document.querySelector("[data-route-cities]");
+  const grid = section?.querySelector(".route-city-grid");
+  if (!grid) return;
+  grid.innerHTML = (route.cityIds || []).slice(0, 6).map((id) => {
+    const city = state.citiesById?.[id];
+    const country = state.countriesById?.[city?.countryId] || {};
+    if (!city) return "";
+    const cover = city.cover || country.cover || "assets/home-aurora-cover.svg";
+    return `
+      <a class="route-city-card" href="city-oslo.html#${encodeURIComponent(city.id)}" data-city-link="${escapeHtml(city.id)}">
+        <img src="${escapeHtml(cover)}" alt="${escapeHtml(city.name)}封面图" />
+        <span></span>
+        <strong>${escapeHtml(city.name)}</strong>
+        <em>${escapeHtml(country.name || "")}</em>
+      </a>
+    `;
+  }).join("");
+}
+
+function renderHighlights(route) {
+  const grid = document.querySelector("[data-route-highlights] .route-highlight-grid");
+  if (!grid) return;
+  const highlights = (route.tags || []).slice(0, 4);
+  grid.innerHTML = highlights.map((tag) => `
+    <article>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.3 5 5.2-1.5-2.2 5 4 3.8-5.5.6-.8 5.4-4-3.8-4.7 2.8.8-5.4-5-2.4 4.7-2.8L6.6 4.2Z"></path></svg>
+      <span><strong>${escapeHtml(tag)}</strong><em>${escapeHtml(route.reason || "路线亮点")}</em></span>
+    </article>
+  `).join("");
+}
+
+function renderRelated(route, state) {
+  const list = document.querySelector(".route-related-list");
+  if (!list) return;
+  const related = (state.routes || [])
+    .filter((item) => item.id !== route.id && (item.countryIds || []).some((id) => (route.countryIds || []).includes(id)))
+    .slice(0, 3);
+  list.innerHTML = related.map((item) => `
+    <a href="route-nordic.html#${encodeURIComponent(item.id)}" data-related-route="${escapeHtml(item.id)}">
+      <img src="${escapeHtml(item.cover || "assets/home-aurora-cover.svg")}" alt="${escapeHtml(item.name)}封面图" />
+      <span><strong>${escapeHtml(item.name)}</strong><em>${escapeHtml(item.days || "天数待定")} · ${escapeHtml(item.budgetLevel || "中等")}</em></span>
+    </a>
+  `).join("") || `<p class="atlas-empty">暂无相关路线</p>`;
+}
+
+favoriteButton?.addEventListener("click", (event) => {
   const button = event.currentTarget;
-  const isFavorited = button.classList.toggle("favorited");
+  const route = currentRoute();
+  const nextState = updateState((state) => {
+    const favorites = new Set(state.favoriteRouteIds || []);
+    if (favorites.has(route.id)) favorites.delete(route.id);
+    else favorites.add(route.id);
+    state.favoriteRouteIds = [...favorites];
+    return state;
+  });
+  const isFavorited = nextState.routesById?.[route.id]?.isFavorite;
+  button.classList.toggle("favorited", isFavorited);
   button.setAttribute("aria-pressed", String(isFavorited));
 });
 
-document.querySelector("[data-route-share]")?.addEventListener("click", () => {
-  window.openShareCard?.("route", {
-    name: "北欧极光之旅",
-    cover: "assets/route-detail-hero-nordic.svg",
-    description: "挪威 · 瑞典 · 芬兰",
-    meta: "8-12天 · 3国",
+addRouteButton?.addEventListener("click", () => {
+  const route = currentRoute();
+  window.openAddToTripModal?.({
+    type: "route",
+    id: route.id,
+    name: route.name,
+    countryIds: route.countryIds || [],
+    cityIds: route.cityIds || [],
   });
 });
+
+renderRouteDetailState();

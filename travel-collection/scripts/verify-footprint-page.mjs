@@ -33,12 +33,15 @@ const requiredCss = [
 
 const requiredJs = [
   "function calculateFootprintStats",
-  "completedTrips",
-  "manualExploredCountries",
-  "manualExploredCities",
+  "function openFootprintTripList",
+  "function openFootprintAchievementList",
+  "TravelState",
+  "getTravelStats",
   "data-footprint-country-count",
   "data-footprint-city-count",
   "data-footprint-trip-count",
+  "data-footprint-full-trips",
+  "data-footprint-full-achievements",
 ];
 
 const missing = [
@@ -50,6 +53,13 @@ const missing = [
 if (missing.length) {
   console.error(`Missing footprint requirements:\n${missing.join("\n")}`);
   process.exit(1);
+}
+
+for (const forbidden of ["这里会在正式版本中展开对应列表", "占位入口"]) {
+  if (js.includes(forbidden)) {
+    console.error(`Footprint page still contains placeholder text: ${forbidden}`);
+    process.exit(1);
+  }
 }
 
 console.log("Footprint page structure verified.");

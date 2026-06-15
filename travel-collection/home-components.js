@@ -1,26 +1,4 @@
 const icons = {
-  signal: `
-    <svg class="status-signal" viewBox="0 0 18 12">
-      <rect x="1" y="8" width="2" height="3" rx="0.7"></rect>
-      <rect x="5" y="6" width="2" height="5" rx="0.7"></rect>
-      <rect x="9" y="4" width="2" height="7" rx="0.7"></rect>
-      <rect x="13" y="2" width="2" height="9" rx="0.7"></rect>
-    </svg>
-  `,
-  wifi: `
-    <svg class="status-wifi" viewBox="0 0 16 12">
-      <path d="M2.1 4.2C5.4 1.5 10.6 1.5 13.9 4.2"></path>
-      <path d="M4.6 6.7c1.9-1.5 4.9-1.5 6.8 0"></path>
-      <path d="M7.1 9.2c.5-.4 1.3-.4 1.8 0"></path>
-    </svg>
-  `,
-  battery: `
-    <svg class="status-battery" viewBox="0 0 24 12">
-      <rect x="1" y="2.2" width="19" height="7.6" rx="2"></rect>
-      <rect x="3" y="4" width="15" height="4" rx="1"></rect>
-      <rect x="21" y="4.4" width="2" height="3.2" rx="0.8"></rect>
-    </svg>
-  `,
   bell: `
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M17.2 9.4c0-3.1-2-5.4-5.2-5.4S6.8 6.3 6.8 9.4c0 5-2 5.5-2 6.8h14.4c0-1.3-2-1.8-2-6.8Z"></path>
@@ -37,132 +15,155 @@ const icons = {
 const tabs = [
   {
     label: "首页",
-    icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.8 12 4l8 6.8V20H5.5v-7.6H4Z"></path></svg>`,
+    href: "mobile.html",
+    icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10.8 9-7.2 9 7.2"></path><path d="M5.2 9.6V20h13.6V9.6"></path><path d="M9.5 20v-6h5v6"></path></svg>`,
   },
   {
     label: "图鉴",
-    icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 8.4a3.1 3.1 0 1 1-6.2 0 3.1 3.1 0 0 1 6.2 0Z"></path><path d="M21.2 8.4a3.1 3.1 0 1 1-6.2 0 3.1 3.1 0 0 1 6.2 0Z"></path><path d="M15.1 17.3a3.1 3.1 0 1 1-6.2 0 3.1 3.1 0 0 1 6.2 0Z"></path><path d="m8.3 10.6 2.2 3.7M15.7 10.6l-2.2 3.7"></path></svg>`,
+    href: "atlas.html",
+    icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5v14l5-2 6 2 5-2v-14l-5 2-6-2-5 2Z"></path><path d="M9 3.5v14"></path><path d="M15 5.5v14"></path></svg>`,
   },
   {
     label: "路线",
-    icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 8.2h13.6v9.6H5.2Z"></path><path d="M8.2 8.2V6.4h7.6v1.8M8.4 13h7.2"></path><path d="M17.2 5.1v2.4M16 6.3h2.4"></path></svg>`,
+    href: "routes.html",
+    icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path><path d="M18 21.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"></path><path d="M6 7.5v2.8c0 1.5 1.2 2.7 2.7 2.7h6.6c1.5 0 2.7 1.2 2.7 2.7v.8"></path><path d="M9.5 13H14"></path></svg>`,
   },
   {
     label: "行程",
-    icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h12v15H6Z"></path><path d="M9 3v4M15 3v4M8.8 11h6.4M8.8 15h4.2"></path></svg>`,
+    href: "trips.html",
+    icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6.5h14v13H5Z"></path><path d="M8.5 3.8v4"></path><path d="M15.5 3.8v4"></path><path d="M5 10.2h14"></path><path d="M8.5 14h2.2"></path><path d="M13.3 14h2.2"></path></svg>`,
   },
   {
     label: "我的",
-    icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.1a3.8 3.8 0 1 0 0-7.6 3.8 3.8 0 0 0 0 7.6Z"></path><path d="M5.5 20c.8-3.2 3-5 6.5-5s5.7 1.8 6.5 5"></path></svg>`,
+    href: "profile.html",
+    icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a3.8 3.8 0 1 0 0-7.6 3.8 3.8 0 0 0 0 7.6Z"></path><path d="M5.2 20.2c.9-3.4 3.3-5.2 6.8-5.2s5.9 1.8 6.8 5.2"></path></svg>`,
   },
 ];
 
-class StatusBar extends HTMLElement {
-  connectedCallback() {
-    this.innerHTML = `
-      <header class="home-statusbar" aria-label="状态栏">
-        <time>${this.getAttribute("time") || "9:41"}</time>
-        <div class="home-status-icons" aria-hidden="true">
-          ${icons.signal}
-          ${icons.wifi}
-          ${icons.battery}
-        </div>
-      </header>
-    `;
-  }
-}
-
 class GreetingHeader extends HTMLElement {
   connectedCallback() {
+    const state = readTravelState();
+    const nickname = state.userProfile?.nickname || "旅行者";
     this.innerHTML = `
       <section class="home-greeting" aria-label="问候">
-        <div>
-          <h1>${this.getAttribute("title") || "你好，Ruby"} <span aria-hidden="true">${this.getAttribute("emoji") || "👋"}</span></h1>
+        <div data-profile-home-link>
+          <h1>${this.getAttribute("title") || `你好，${nickname}`} <span aria-hidden="true">${this.getAttribute("emoji") || "👋"}</span></h1>
           <p>${this.getAttribute("subtitle") || "每一次出发，都是世界给你的礼物。"}</p>
         </div>
         <button class="home-bell-button notification-bell" type="button" aria-label="通知" data-notification-bell>${icons.bell}<i data-notification-badge>3</i></button>
       </section>
     `;
+    this.querySelector("[data-profile-home-link]")?.addEventListener("click", () => {
+      window.location.href = "profile.html";
+    });
   }
 }
 
 class StatCard extends HTMLElement {
   connectedCallback() {
     const state = readTravelState();
-    const exploredCount = state.exploredCountryCount || (Array.isArray(state.exploredCountries) ? state.exploredCountries.length : null);
+    const stats = getTravelStats(state);
+    const exploredCount = stats.exploredCountryCount;
+    const total = stats.totalCountryCount;
+    const progressPercent = Math.max(0, Math.min(100, Number(this.getAttribute("percent")?.replace("%", "") || stats.progressPercent || 0)));
+    const percent = `${progressPercent}%`;
     this.innerHTML = `
       <section class="home-stat-card" aria-label="${this.getAttribute("label") || "已点亮国家"}">
         <div class="home-stat-copy">
           <p>${this.getAttribute("label") || "已点亮国家"}</p>
-          <div class="home-stat-number"><strong>${this.getAttribute("count") || exploredCount || "11"}</strong><span>/ ${this.getAttribute("total") || "195"}</span></div>
+          <div class="home-stat-number"><strong>${this.getAttribute("count") || exploredCount}</strong><span>/ ${this.getAttribute("total") || total}</span></div>
           <p class="home-progress-label">${this.getAttribute("progress-label") || "世界探索进度"}</p>
           <div class="home-progress-row">
-            <div class="home-progress-track"><i></i></div>
-            <span>${this.getAttribute("percent") || "11%"}</span>
+            <div class="home-progress-track" style="--progress-percent: ${progressPercent}%"><i></i></div>
+            <span>${this.getAttribute("percent") || percent}</span>
           </div>
         </div>
-        <img class="home-map-asset" src="${this.getAttribute("map-src") || "assets/home-map-asset.svg"}" alt="" />
-        <img class="home-mascot-asset" src="${this.getAttribute("mascot-src") || "assets/home-mascot-placeholder.svg"}" alt="旅行收集册宠物占位图" />
+        <img class="home-map-asset" src="${this.getAttribute("map-src") || "assets/home-map-p2.png"}" alt="" />
+        <img class="home-mascot-asset" src="${this.getAttribute("mascot-src") || "assets/home-bear-mascot.png"}" alt="旅行熊吉祥物" />
       </section>
     `;
+    this.querySelector(".home-stat-card")?.addEventListener("click", () => {
+      window.location.href = "footprint.html";
+    });
   }
 }
 
 class TripPreviewCard extends HTMLElement {
   connectedCallback() {
     const state = readTravelState();
-    const trip = state.nextTrip || {};
-    const title = trip.name || this.getAttribute("title") || "北欧极光之旅";
-    const places = Array.isArray(trip.places) ? trip.places.join("、") : this.getAttribute("places") || "挪威、冰岛、芬兰";
-    const date = trip.start ? `出发日期：${trip.start}` : this.getAttribute("date") || "出发日期：2026.07.18";
+    const trip = state.nextTrip || null;
+    const title = trip?.name || this.getAttribute("empty-title") || "暂无待出行";
+    const start = trip?.start || trip?.startDate;
+    const date = start ? `出发日期：${start}` : this.getAttribute("empty-date") || "从行程页添加计划";
+    const cover = resolveTripCover(trip, state);
     this.innerHTML = `
-      <section class="home-next-card" aria-label="${this.getAttribute("label") || "下一目标"}">
-        <div class="home-next-copy">
-          <p>${this.getAttribute("label") || "下一目标"}</p>
-          <h2>${title}</h2>
-          <p>${places}</p>
-          <p>${date}</p>
-        </div>
-        <img src="${this.getAttribute("cover-src") || "assets/home-aurora-cover.svg"}" alt="${this.getAttribute("cover-alt") || "极光封面图"}" />
+      <section class="home-next-section" aria-label="${this.getAttribute("label") || "下一目标"}">
+        <h2>${this.getAttribute("label") || "下一目标"}</h2>
+        <article class="home-next-card ${trip ? "" : "is-empty"}">
+          ${trip ? `<img class="home-next-cover" src="${this.getAttribute("cover-src") || cover}" alt="${this.getAttribute("cover-alt") || `${title}封面图`}" />` : `<span class="home-next-cover home-next-empty-cover" aria-hidden="true"></span>`}
+          <div class="home-next-copy">
+            <h3>${title}</h3>
+            <p>${date}</p>
+          </div>
+          ${trip ? icons.arrow : ""}
+        </article>
       </section>
     `;
+    this.querySelector(".home-next-card")?.addEventListener("click", () => {
+      if (trip.id) window.location.href = `trips.html#${encodeURIComponent(trip.id)}`;
+    });
   }
 }
 
 class RecentTripCard extends HTMLElement {
   connectedCallback() {
-    const chips = (this.getAttribute("chips") || "日本,3城市,1国家")
+    const state = readTravelState();
+    const trip = state.recentTrip || null;
+    const countryCount = Array.isArray(trip?.countryIds) ? trip.countryIds.length : 0;
+    const cityCount = Array.isArray(trip?.cityIds) ? trip.cityIds.length : 0;
+    const countryName = tripPlaceNames(trip || {}, state).split("、")[0] || "目的地";
+    const chips = (this.getAttribute("chips") || `${countryName},${cityCount}城市,${countryCount}国家`)
       .split(",")
       .map((chip) => `<span>${chip.trim()}</span>`)
       .join("");
+    const title = trip?.name || this.getAttribute("empty-title") || "还没有完成旅程";
+    const date = trip?.start && trip?.end ? `${trip.start} - ${shortDate(trip.end)}` : this.getAttribute("empty-date") || "完成旅程后会显示在这里";
+    const cover = resolveTripCover(trip, state);
 
     this.innerHTML = `
       <section class="home-recent-section" aria-label="最近旅程">
         <h2>${this.getAttribute("section-title") || "最近旅程"}</h2>
-        <article class="home-recent-card">
-          <img class="home-recent-cover" src="${this.getAttribute("cover-src") || "assets/home-japan-cover.svg"}" alt="${this.getAttribute("cover-alt") || "日本关西之旅封面图"}" />
+        <article class="home-recent-card ${trip ? "" : "is-empty"}">
+          ${trip ? `<img class="home-recent-cover" src="${this.getAttribute("cover-src") || cover}" alt="${this.getAttribute("cover-alt") || `${title}封面图`}" />` : `<span class="home-recent-cover home-recent-empty-cover" aria-hidden="true"></span>`}
           <div class="home-recent-copy">
-            <h3>${this.getAttribute("title") || "日本关西之旅"}</h3>
-            <p>${this.getAttribute("date") || "2026.04.10 - 04.17"}</p>
-            <div class="home-recent-chips" aria-label="旅程标签">${chips}</div>
+            <h3>${title}</h3>
+            <p>${date}</p>
+            ${trip ? `<div class="home-recent-chips" aria-label="旅程标签">${chips}</div>` : ""}
           </div>
           ${icons.arrow}
         </article>
       </section>
     `;
+    this.querySelector(".home-recent-card")?.addEventListener("click", () => {
+      if (trip.id) window.location.href = `trips.html#${encodeURIComponent(trip.id)}`;
+      else if ((state.exploredCountries || [])[0]) window.location.href = `country-japan.html#${encodeURIComponent(state.exploredCountries[0].id)}`;
+      else window.location.href = "footprint.html";
+    });
   }
 }
 
 class BottomTabBar extends HTMLElement {
   connectedCallback() {
-    const activeLabel = this.getAttribute("active") || "首页";
+    const currentFile = (window.location.pathname.split("/").pop() || "mobile.html").toLowerCase();
+    const currentTab = tabs.find((tab) => tab.href.toLowerCase() === currentFile)?.label;
+    const activeLabel = this.getAttribute("active") || currentTab || "首页";
     this.innerHTML = `
       <nav class="home-tabbar" aria-label="底部导航">
         ${tabs
           .map((tab) => {
             const isActive = tab.label === activeLabel;
             return `
-              <a class="${isActive ? "active" : ""}" href="#" ${isActive ? 'aria-current="page"' : ""}>
+              <a class="${isActive ? "active" : ""}" href="${tab.href}" ${isActive ? 'aria-current="page"' : ""}>
                 <span>${tab.icon}</span>
                 ${tab.label}
               </a>
@@ -174,7 +175,6 @@ class BottomTabBar extends HTMLElement {
   }
 }
 
-customElements.define("status-bar", StatusBar);
 customElements.define("greeting-header", GreetingHeader);
 customElements.define("stat-card", StatCard);
 customElements.define("trip-preview-card", TripPreviewCard);
@@ -182,9 +182,24 @@ customElements.define("recent-trip-card", RecentTripCard);
 customElements.define("bottom-tab-bar", BottomTabBar);
 
 function readTravelState() {
-  try {
-    return JSON.parse(localStorage.getItem("travelCollectionState") || "{}");
-  } catch {
-    return {};
-  }
+  return window.TravelState?.readTravelState?.() || {};
+}
+
+function getTravelStats(state) {
+  return window.TravelState?.getTravelStats?.(state) || {};
+}
+
+function resolveTripCover(trip, state) {
+  return window.TravelState?.resolveTripCover?.(trip, state) || "assets/home-aurora-cover.svg";
+}
+
+function tripPlaceNames(trip, state) {
+  const names = (trip.countryIds || trip.countries || trip.places || [])
+    .map((id) => state.countriesById?.[id]?.name || (typeof id === "string" ? id : id?.name))
+    .filter(Boolean);
+  return names.join("、");
+}
+
+function shortDate(value) {
+  return String(value).replace(/^\d{4}[.-]?/, "");
 }

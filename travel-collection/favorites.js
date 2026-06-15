@@ -2,71 +2,70 @@ const favoriteTabs = [...document.querySelectorAll("[data-favorite-tab]")];
 const favoriteSearch = document.querySelector("[data-favorite-search]");
 const favoriteGrid = document.querySelector("[data-favorite-grid]");
 const favoriteCount = document.querySelector("[data-favorite-count]");
-
-const favoriteData = {
-  countries: [
-    { name: "日本", en: "Japan", meta: "🇯🇵 已探索 · 3个城市", cover: "assets/favorite-japan-cover.svg", href: "country-japan.html" },
-    { name: "土耳其", en: "Türkiye", meta: "🇹🇷 想去 · 2个城市", cover: "assets/favorite-turkey-cover.svg", href: "country-japan.html#country-TR" },
-    { name: "冰岛", en: "Iceland", meta: "🇮🇸 想去 · 1个城市", cover: "assets/favorite-iceland-cover.svg", href: "country-japan.html#country-IS" },
-    { name: "意大利", en: "Italy", meta: "🇮🇹 已探索 · 4个城市", cover: "assets/favorite-italy-cover.svg", href: "country-japan.html#country-IT" },
-    { name: "希腊", en: "Greece", meta: "🇬🇷 想去 · 2个城市", cover: "assets/favorite-greece-cover.svg", href: "country-japan.html#country-GR" },
-    { name: "泰国", en: "Thailand", meta: "🇹🇭 已探索 · 3个城市", cover: "assets/favorite-thailand-cover.svg", href: "country-japan.html#country-TH" },
-  ],
-  cities: [
-    { name: "京都", en: "日本", meta: "已探索 · 日本", cover: "assets/detail-city-kyoto.svg", href: "city-oslo.html#kyoto" },
-    { name: "巴塞罗那", en: "西班牙", meta: "想去 · 西班牙", cover: "assets/favorite-city-barcelona.svg", href: "city-oslo.html#barcelona" },
-    { name: "清迈", en: "泰国", meta: "已探索 · 泰国", cover: "assets/favorite-city-chiangmai.svg", href: "city-oslo.html#chiangmai" },
-    { name: "雷克雅未克", en: "冰岛", meta: "想去 · 冰岛", cover: "assets/favorite-city-reykjavik.svg", href: "city-oslo.html#reykjavik" },
-    { name: "巴黎", en: "法国", meta: "已探索 · 法国", cover: "assets/favorite-city-paris.svg", href: "city-oslo.html#paris" },
-    { name: "罗马", en: "意大利", meta: "已探索 · 意大利", cover: "assets/favorite-city-rome.svg", href: "city-oslo.html#rome" },
-  ],
-  routes: [
-    { name: "北欧极光之旅", en: "挪威 · 瑞典 · 芬兰", days: "8-12天", season: "11月-3月", budget: "中高", cover: "assets/route-detail-hero-nordic.svg", href: "route-nordic.html" },
-    { name: "土耳其经典之旅", en: "土耳其", days: "7-10天", season: "4月-10月", budget: "中等", cover: "assets/favorite-turkey-cover.svg", href: "route-nordic.html#turkey-classic" },
-    { name: "日本关西之旅", en: "日本", days: "7-9天", season: "3月-5月", budget: "中等", cover: "assets/favorite-japan-cover.svg", href: "route-nordic.html#japan-kansai" },
-    { name: "古希腊文明之旅", en: "希腊", days: "6-8天", season: "4月-10月", budget: "中等", cover: "assets/favorite-route-greece.svg", href: "route-nordic.html#greece-civilization" },
-    { name: "东非 Safari 之旅", en: "肯尼亚 · 坦桑尼亚", days: "6-10天", season: "6月-10月", budget: "中高", cover: "assets/favorite-route-safari.svg", href: "route-nordic.html#east-africa-safari" },
-    { name: "泰国海岛度假线", en: "泰国", days: "6-8天", season: "11月-2月", budget: "中等", cover: "assets/favorite-thailand-cover.svg", href: "route-nordic.html#thai-islands" },
-    { name: "中亚大环线", en: "哈萨克斯坦 · 乌兹别克斯坦 · 吉尔吉斯斯坦", days: "10-14天", season: "4月-10月", budget: "中等", cover: "assets/favorite-route-central-asia.svg", href: "route-nordic.html#central-asia" },
-    { name: "加拿大自然探索线", en: "加拿大", days: "8-12天", season: "6月-9月", budget: "中高", cover: "assets/favorite-route-canada.svg", href: "route-nordic.html#canada-nature" },
-  ],
-};
+const favoritesBack = document.querySelector("[data-favorites-back]");
 
 const tabLabels = {
-  countries: { label: "国家", placeholder: "搜索国家", total: 12 },
-  cities: { label: "城市", placeholder: "搜索城市或所属国家", total: 18 },
-  routes: { label: "路线", placeholder: "搜索路线名称、国家或城市", total: 8 },
+  countries: { label: "国家", placeholder: "搜索国家" },
+  cities: { label: "城市", placeholder: "搜索城市或所属国家" },
+  routes: { label: "路线", placeholder: "搜索路线名称、国家或城市" },
 };
 
 let activeFavoriteTab = "countries";
 
-function currentItems() {
-  const keyword = (favoriteSearch?.value || "").trim().toLowerCase();
-  return (favoriteData[activeFavoriteTab] || []).filter((item) => {
-    const text = `${item.name} ${item.en} ${item.meta || ""} ${item.days || ""} ${item.season || ""} ${item.budget || ""}`.toLowerCase();
-    return !keyword || text.includes(keyword);
-  });
+favoritesBack?.addEventListener("click", () => {
+  window.location.href = "profile.html";
+});
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 }
 
-function renderFavoriteCard(item) {
-  if (activeFavoriteTab === "cities") return renderFavoriteCityCard(item);
-  if (activeFavoriteTab === "routes") return renderFavoriteRouteCard(item);
-  return `
-    <article class="favorite-card" tabindex="0" role="button" data-favorite-card data-favorite-href="${item.href}" data-favorite-text="${item.name} ${item.en} ${item.meta}">
-      <span class="favorite-cover">
-        <img src="${item.cover}" alt="${item.name}封面图" />
-        <span class="favorite-cover-shade"></span>
-        <button class="favorite-heart" type="button" aria-label="取消收藏 ${item.name}" data-remove-favorite>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19.2S5.2 15.1 5.2 9.9A3.7 3.7 0 0 1 12 7.8a3.7 3.7 0 0 1 6.8 2.1c0 5.2-6.8 9.3-6.8 9.3Z"></path></svg>
-        </button>
-      </span>
-      <span class="favorite-copy">
-        <strong>${item.name}</strong>
-        <em>${item.en}</em>
-        <small>${item.meta}</small>
-      </span>
-    </article>
-  `;
+function readTravelState() {
+  return window.TravelState?.readTravelState?.() || {};
+}
+
+function itemHref(item, type) {
+  if (type === "cities") return `city-oslo.html#${encodeURIComponent(item.id)}`;
+  if (type === "routes") return item.id === "nordic-aurora" ? "route-nordic.html" : `route-nordic.html#${encodeURIComponent(item.id)}`;
+  return item.id === "JP" ? "country-japan.html" : `country-japan.html#${encodeURIComponent(item.id)}`;
+}
+
+function statusText(item) {
+  if (item.explorationStatus === "explored") return "已探索";
+  if (item.explorationStatus === "planned") return "待出行";
+  return "未探索";
+}
+
+function routeMeta(item, state) {
+  const countryNames = (item.countryIds || []).map((id) => state.countriesById?.[id]?.name || id);
+  const cityNames = (item.cityIds || []).map((id) => state.citiesById?.[id]?.name || id);
+  return countryNames.length ? countryNames.join(" · ") : cityNames.join(" · ");
+}
+
+function currentItems() {
+  const state = readTravelState();
+  const keyword = (favoriteSearch?.value || "").trim().toLowerCase();
+  const items = window.TravelState?.getFavoriteItems?.(state, activeFavoriteTab) || [];
+  return items.filter((item) => {
+    const country = state.countriesById?.[item.countryId]?.name || "";
+    const text = [
+      item.name,
+      item.id,
+      item.searchText,
+      item.kind,
+      item.reason,
+      item.days,
+      item.season,
+      item.budgetLevel,
+      country,
+      routeMeta(item, state),
+    ].join(" ").toLowerCase();
+    return !keyword || text.includes(keyword);
+  });
 }
 
 function renderMetaIcon(type) {
@@ -75,50 +74,69 @@ function renderMetaIcon(type) {
   return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v3M17 4v3M5.2 8.2h13.6"></path><rect x="4.2" y="5.8" width="15.6" height="14" rx="3"></rect></svg>`;
 }
 
-function renderFavoriteRouteCard(item) {
+function renderFavoriteCard(item) {
+  if (activeFavoriteTab === "cities") return renderFavoriteCityCard(item);
+  if (activeFavoriteTab === "routes") return renderFavoriteRouteCard(item);
+  return renderFavoriteCountryCard(item);
+}
+
+function renderFavoriteCountryCard(item) {
+  const href = itemHref(item, "countries");
   return `
-    <article class="favorite-route-card" tabindex="0" role="button" data-favorite-card data-favorite-href="${item.href}" data-favorite-text="${item.name} ${item.en} ${item.days} ${item.season} ${item.budget}">
-      <img src="${item.cover}" alt="${item.name}封面图" />
-      <span class="favorite-route-copy">
-        <strong>${item.name}</strong>
-        <em>${item.en}</em>
-        <span class="favorite-route-meta">
-          <small>${renderMetaIcon("days")}${item.days}</small>
-          <small>${renderMetaIcon("season")}${item.season}</small>
-          <small>${renderMetaIcon("budget")}${item.budget}</small>
-        </span>
+    <article class="favorite-card" tabindex="0" role="button" data-favorite-card data-favorite-id="${escapeHtml(item.id)}" data-favorite-href="${escapeHtml(href)}">
+      <span class="favorite-cover">
+        <img src="${escapeHtml(item.cover)}" alt="${escapeHtml(item.name)}封面图" />
+        <span class="favorite-cover-shade"></span>
+        <button class="favorite-heart" type="button" aria-label="取消收藏 ${escapeHtml(item.name)}" data-remove-favorite>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19.2S5.2 15.1 5.2 9.9A3.7 3.7 0 0 1 12 7.8a3.7 3.7 0 0 1 6.8 2.1c0 5.2-6.8 9.3-6.8 9.3Z"></path></svg>
+        </button>
       </span>
-      <button class="favorite-route-heart" type="button" aria-label="取消收藏 ${item.name}" data-remove-favorite>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19.2S5.2 15.1 5.2 9.9A3.7 3.7 0 0 1 12 7.8a3.7 3.7 0 0 1 6.8 2.1c0 5.2-6.8 9.3-6.8 9.3Z"></path></svg>
-      </button>
+      <span class="favorite-copy">
+        <strong>${escapeHtml(item.name)}</strong>
+        <em>${escapeHtml(item.id)}</em>
+        <small>${escapeHtml(statusText(item))}</small>
+      </span>
     </article>
   `;
 }
 
 function renderFavoriteCityCard(item) {
+  const state = readTravelState();
+  const countryName = state.countriesById?.[item.countryId]?.name || item.countryId || "";
   return `
-    <article class="favorite-city-card" tabindex="0" role="button" data-favorite-card data-favorite-href="${item.href}" data-favorite-text="${item.name} ${item.en} ${item.meta}">
-      <img src="${item.cover}" alt="${item.name}封面图" />
+    <article class="favorite-city-card" tabindex="0" role="button" data-favorite-card data-favorite-id="${escapeHtml(item.id)}" data-favorite-href="${escapeHtml(itemHref(item, "cities"))}">
+      <img src="${escapeHtml(item.cover)}" alt="${escapeHtml(item.name)}封面图" />
       <span class="favorite-city-copy">
-        <strong>${item.name}</strong>
-        <em>${item.en}</em>
-        <small>${item.meta}</small>
+        <strong>${escapeHtml(item.name)}</strong>
+        <em>${escapeHtml(countryName)}</em>
+        <small>${escapeHtml(statusText(item))} · ${escapeHtml(countryName)}</small>
       </span>
-      <button class="favorite-city-heart" type="button" aria-label="取消收藏 ${item.name}" data-remove-favorite>
+      <button class="favorite-city-heart" type="button" aria-label="取消收藏 ${escapeHtml(item.name)}" data-remove-favorite>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19.2S5.2 15.1 5.2 9.9A3.7 3.7 0 0 1 12 7.8a3.7 3.7 0 0 1 6.8 2.1c0 5.2-6.8 9.3-6.8 9.3Z"></path></svg>
       </button>
     </article>
   `;
 }
 
-function renderFavorites() {
-  const items = currentItems();
-  const total = (favoriteSearch?.value || "").trim() ? items.length : tabLabels[activeFavoriteTab].total;
-  if (favoriteCount) favoriteCount.textContent = `全部 ${total}`;
-  if (!favoriteGrid) return;
-  favoriteGrid.classList.toggle("city-list", activeFavoriteTab === "cities");
-  favoriteGrid.classList.toggle("route-list", activeFavoriteTab === "routes");
-  favoriteGrid.innerHTML = `${items.map(renderFavoriteCard).join("")}${activeFavoriteTab === "routes" ? renderRouteTip() : ""}`;
+function renderFavoriteRouteCard(item) {
+  const state = readTravelState();
+  return `
+    <article class="favorite-route-card" tabindex="0" role="button" data-favorite-card data-favorite-id="${escapeHtml(item.id)}" data-favorite-href="${escapeHtml(itemHref(item, "routes"))}">
+      <img src="${escapeHtml(item.cover)}" alt="${escapeHtml(item.name)}封面图" />
+      <span class="favorite-route-copy">
+        <strong>${escapeHtml(item.name)}</strong>
+        <em>${escapeHtml(routeMeta(item, state))}</em>
+        <span class="favorite-route-meta">
+          <small>${renderMetaIcon("days")}${escapeHtml(item.days || "天数待定")}</small>
+          <small>${renderMetaIcon("season")}${escapeHtml(item.season || "季节待定")}</small>
+          <small>${renderMetaIcon("budget")}${escapeHtml(item.budgetLevel || "预算待定")}</small>
+        </span>
+      </span>
+      <button class="favorite-route-heart" type="button" aria-label="取消收藏 ${escapeHtml(item.name)}" data-remove-favorite>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19.2S5.2 15.1 5.2 9.9A3.7 3.7 0 0 1 12 7.8a3.7 3.7 0 0 1 6.8 2.1c0 5.2-6.8 9.3-6.8 9.3Z"></path></svg>
+      </button>
+    </article>
+  `;
 }
 
 function renderRouteTip() {
@@ -128,6 +146,17 @@ function renderRouteTip() {
       <p>这些都是你收藏的路线<br />未来一定会去体验的！<span aria-hidden="true">🌿</span></p>
     </aside>
   `;
+}
+
+function renderFavorites() {
+  const items = currentItems();
+  if (favoriteCount) favoriteCount.textContent = `全部 ${items.length}`;
+  if (!favoriteGrid) return;
+  favoriteGrid.classList.toggle("city-list", activeFavoriteTab === "cities");
+  favoriteGrid.classList.toggle("route-list", activeFavoriteTab === "routes");
+  favoriteGrid.innerHTML = items.length
+    ? `${items.map(renderFavoriteCard).join("")}${activeFavoriteTab === "routes" ? renderRouteTip() : ""}`
+    : `<article class="trip-empty-state">没有匹配的收藏。</article>`;
 }
 
 favoriteTabs.forEach((button) => {
@@ -149,8 +178,10 @@ favoriteGrid?.addEventListener("click", (event) => {
   if (remove) {
     event.preventDefault();
     event.stopPropagation();
-    remove.closest("[data-favorite-card]")?.remove();
-    if (favoriteCount) favoriteCount.textContent = `全部 ${favoriteGrid.querySelectorAll("[data-favorite-card]").length}`;
+    const card = remove.closest("[data-favorite-card]");
+    const next = window.TravelState?.setFavorite?.(readTravelState(), activeFavoriteTab, card?.dataset.favoriteId, false);
+    if (next) window.TravelState.writeTravelState(next);
+    renderFavorites();
     return;
   }
 

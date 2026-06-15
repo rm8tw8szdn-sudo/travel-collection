@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import vm from "node:vm";
 
-const source = fs.readFileSync(new URL("../mobile-app.js", import.meta.url), "utf8");
+const source = fs.readFileSync(new URL("../legacy/mobile-app.js", import.meta.url), "utf8");
 const start = source.indexOf("const countryGuides = ");
 const end = source.indexOf("\nconst groupGuideProfiles = ");
 
 if (start === -1 || end === -1) {
-  throw new Error("Could not find country guide block in mobile-app.js");
+  throw new Error("Could not find country guide block in legacy/mobile-app.js");
 }
 
 const context = {};

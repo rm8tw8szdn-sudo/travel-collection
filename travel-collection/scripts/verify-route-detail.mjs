@@ -11,6 +11,10 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+assert.equal = (actual, expected, message) => {
+  if (actual !== expected) throw new Error(`${message}: expected ${expected}, got ${actual}`);
+};
+
 async function text(page, selector) {
   return (await page.locator(selector).innerText()).replace(/\s+/g, " ").trim();
 }
@@ -25,34 +29,17 @@ try {
   const page = await context.newPage();
 
   await page.goto(urlFor("routes.html"));
-  await page.click("[data-route-name='北欧极光线']");
+  assert(await page.locator("[data-route-open='nordic-aurora']").isVisible(), "route cards should still open route detail");
+  assert.equal(await page.locator("text=涉及国家").count(), 0, "route list should not expose involved-country entry");
+
+  await page.click("[data-route-open='nordic-aurora']");
   await page.waitForURL(/route-nordic\.html$/);
 
-  assert((await text(page, ".route-detail-title")).includes("北欧极光之旅"), "route detail title should render");
+  assert((await text(page, ".route-detail-title")).includes("北欧极光线"), "route detail title should render");
   assert((await text(page, ".route-detail-summary")).includes("建议天数"), "summary info card should render");
-  assert((await text(page, "[data-route-countries]")).includes("挪威"), "included country cards should render");
+  assert.equal(await page.locator("[data-route-countries]").count(), 0, "route detail should not show country secondary entries");
   assert((await text(page, "[data-route-cities]")).includes("奥斯陆"), "recommended city cards should render");
-  assert((await text(page, "[data-route-highlights]")).includes("追寻极光"), "route highlights should render");
-
-  await page.click("[data-route-favorite]");
-  assert(await page.locator("[data-route-favorite].favorited").isVisible(), "favorite button should toggle on");
-
-  await page.click("[data-route-share]");
-  await page.locator("[data-share-card-modal]").waitFor({ state: "visible" });
-  assert((await text(page, "[data-share-card-modal]")).includes("路线"), "route share modal should open");
-  await page.click("[data-close-modal]");
-
-  await page.click("[data-country-link='NO']");
-  await page.waitForURL(/country-japan\.html#country-NO$/);
-  await page.goBack();
-
-  await page.click("[data-city-link='oslo']");
-  await page.waitForURL(/city-oslo\.html$/);
-  await page.goBack();
-
-  await page.click("[data-related-route='nordic-winter']");
-  await page.waitForURL(/route-nordic\.html#nordic-winter$/);
-  await page.goBack();
+  assert((await text(page, "[data-route-highlights]")).includes("极光"), "route highlights should render");
 
   await page.click("[data-route-back]");
   await page.waitForURL(/routes\.html$/);

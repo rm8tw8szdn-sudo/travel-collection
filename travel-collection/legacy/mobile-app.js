@@ -2725,7 +2725,7 @@ function renderCountryDetail() {
       </div>
       <div class="country-hero-copy">
         <h3>${place.name}</h3>
-        <p>${place.group} | 126,500 km² | 首都：东京 | 语言：日语</p>
+        <p>${place.group} | 推荐天数：5-8天 | 季节：春秋</p>
       </div>
     </div>
     <p class="country-intro">${normalizeGuideSentence(guide.cities?.[0]?.note || "融合传统与现代的国度，四季分明，文化多元，值得一去再去。", "旅行目的地")}</p>
@@ -3011,7 +3011,6 @@ function renderCityDrawer(place) {
 function renderAppShell() {
   if (!appShell) return;
   appShell.innerHTML = `
-    ${renderStatusBar()}
     ${renderAppHeader()}
     <section class="app-page" data-current-tab="${state.appTab}">
       ${renderCurrentTab()}
@@ -3021,15 +3020,6 @@ function renderAppShell() {
     ${renderCollectionsModal()}
     ${renderTripCreatorModal()}
     ${renderShareCardModal()}
-  `;
-}
-
-function renderStatusBar() {
-  return `
-    <div class="status-bar" aria-hidden="true">
-      <span>9:41</span>
-      <span class="status-icons"><i></i><i></i><i></i><b></b><em></em></span>
-    </div>
   `;
 }
 

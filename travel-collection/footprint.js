@@ -32,44 +32,39 @@ const defaultFootprint = {
   completedTrips: 8,
 };
 
+document.querySelector("[data-footprint-back]")?.addEventListener("click", () => {
+  window.location.href = "profile.html";
+});
+
 function readTravelState() {
-  try {
-    return JSON.parse(localStorage.getItem("travelCollectionState") || "{}");
-  } catch {
-    return {};
-  }
+  return window.TravelState?.readTravelState?.() || {};
 }
 
 function normalizeList(value) {
   return Array.isArray(value) ? value.filter(Boolean) : [];
 }
 
-function calculateFootprintStats(state = readTravelState()) {
-  const trips = normalizeList(state.trips);
-  const completedTrips = trips.filter((trip) => trip.status === "completed");
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
 
-  if (!trips.length) {
+function calculateFootprintStats(state = readTravelState()) {
+  const stats = window.TravelState?.getTravelStats?.(state);
+  if (!stats) {
     return {
       countries: defaultFootprint.countries.length,
       cities: defaultFootprint.cities.length,
       completedTrips: defaultFootprint.completedTrips,
     };
   }
-
-  const manualExploredCountries = normalizeList(state.manualExploredCountries || state.exploredCountries);
-  const manualExploredCities = normalizeList(state.manualExploredCities || state.exploredCities);
-  const countries = new Set(manualExploredCountries);
-  const cities = new Set(manualExploredCities);
-
-  completedTrips.forEach((trip) => {
-    normalizeList(trip.countries).forEach((country) => countries.add(country));
-    normalizeList(trip.cities).forEach((city) => cities.add(city));
-  });
-
   return {
-    countries: countries.size,
-    cities: cities.size,
-    completedTrips: completedTrips.length,
+    countries: stats.exploredCountryCount,
+    cities: stats.exploredCityCount,
+    completedTrips: stats.completedTripCount,
   };
 }
 
@@ -91,7 +86,62 @@ function hydrateFootprintStats() {
   document.querySelector("[data-footprint-progress-percent]")?.replaceChildren(percent);
 }
 
-function openFootprintNotice(title, text) {
+function dateParts(value) {
+  const text = String(value || "");
+  const match = text.match(/(\d{4})[.-](\d{2})/);
+  return { year: match?.[1] || "----", month: match?.[2] || "--" };
+}
+
+function tripPlaceText(trip, state) {
+  const countryNames = normalizeList(trip.countryIds).map((id) => state.countriesById?.[id]?.name || id);
+  const cityNames = normalizeList(trip.cityIds).map((id) => state.citiesById?.[id]?.name || id);
+  return {
+    country: countryNames.join(" · ") || "旅程",
+    city: cityNames.join(" · ") || trip.memory || "旅行记录",
+  };
+}
+
+function renderFootprintTrips() {
+  const state = readTravelState();
+  const list = document.querySelector("[data-footprint-trip-list]");
+  if (!list) return;
+  const trips = normalizeList(state.trips)
+    .filter((trip) => trip.status === "completed")
+    .sort((a, b) => String(b.end || b.endDate || "").localeCompare(String(a.end || a.endDate || "")))
+    .slice(0, 4);
+  list.innerHTML = `<span class="footprint-timeline-line" aria-hidden="true"></span>${trips.map((trip) => {
+    const parts = dateParts(trip.end || trip.endDate || trip.start || trip.startDate);
+    const places = tripPlaceText(trip, state);
+    const cover = window.TravelState?.resolveTripCover?.(trip, state) || trip.cover || "assets/home-aurora-cover.svg";
+    return `
+      <article class="footprint-trip-row" data-trip-detail="${escapeHtml(trip.id)}">
+        <time><strong>${escapeHtml(parts.year)}</strong><em>${escapeHtml(parts.month)}</em></time>
+        <i aria-hidden="true"></i>
+        <button type="button">
+          <img src="${escapeHtml(cover)}" alt="${escapeHtml(trip.name)}封面图" />
+          <span><strong>${escapeHtml(places.country)}</strong><em>${escapeHtml(places.city)}</em></span>
+          <small>${escapeHtml(parts.year)}.${escapeHtml(parts.month)}</small>
+        </button>
+      </article>
+    `;
+  }).join("") || `<article class="trip-empty-state">还没有已完成旅程。</article>`}`;
+}
+
+function renderFootprintAchievements() {
+  const list = document.querySelector("[data-footprint-achievement-list]");
+  if (!list) return;
+  const achievements = (window.TravelState?.getAchievements?.(readTravelState()) || []).filter((item) => item.unlockedAt).slice(0, 3);
+  list.innerHTML = `${achievements.map((item) => `
+    <button type="button" data-achievement="${escapeHtml(item.id)}">
+      <img src="${escapeHtml(item.cover)}" alt="${escapeHtml(item.title)}徽章" />
+      <strong>${escapeHtml(item.title)}</strong>
+      <em>${escapeHtml(item.description)}</em>
+      <small>${escapeHtml(item.unlockedAt)}</small>
+    </button>
+  `).join("")}`;
+}
+
+function ensureFootprintModal() {
   const rootName = "footprintNotice";
   let modal = document.querySelector(`[data-shared-root="${rootName}"]`);
   if (!modal) {
@@ -99,12 +149,87 @@ function openFootprintNotice(title, text) {
     modal.setAttribute("data-shared-root", rootName);
     document.querySelector(".home-screen")?.append(modal);
   }
+  return modal;
+}
+
+function openFootprintNotice(title, text) {
+  const modal = ensureFootprintModal();
   modal.innerHTML = `
     <div class="flow-overlay shared-overlay">
       <section class="notification-list-modal footprint-notice" role="dialog" aria-modal="true">
         <button class="shared-close" type="button" aria-label="关闭" data-close-modal>×</button>
         <h2>${title}</h2>
-        <article><strong>${text}</strong><p>这里会在正式版本中展开对应列表。</p><small>占位入口</small></article>
+        <article><strong>${text}</strong><p>可结合下方旅程时间线查看最近完成的旅行记录。</p></article>
+      </section>
+    </div>
+  `;
+  modal.hidden = false;
+  modal.querySelector("[data-close-modal]")?.addEventListener("click", () => {
+    modal.hidden = true;
+  });
+}
+
+function completedTrips(state = readTravelState()) {
+  return normalizeList(state.trips)
+    .filter((trip) => trip.status === "completed")
+    .sort((a, b) => String(b.end || b.endDate || "").localeCompare(String(a.end || a.endDate || "")));
+}
+
+function openFootprintTripList() {
+  const state = readTravelState();
+  const trips = completedTrips(state);
+  const modal = ensureFootprintModal();
+  modal.innerHTML = `
+    <div class="flow-overlay shared-overlay">
+      <section class="notification-list-modal footprint-notice" role="dialog" aria-modal="true" data-footprint-full-trips>
+        <button class="shared-close" type="button" aria-label="关闭" data-close-modal>×</button>
+        <h2>完整旅程列表</h2>
+        <div>
+          ${trips.length ? trips.map((trip) => {
+            const parts = dateParts(trip.end || trip.endDate || trip.start || trip.startDate);
+            const places = tripPlaceText(trip, state);
+            return `
+              <article>
+                <button type="button" data-open-footprint-trip="${escapeHtml(trip.id)}">
+                  <strong>${escapeHtml(trip.name || places.country)}</strong>
+                  <p>${escapeHtml(places.country)} · ${escapeHtml(places.city)}</p>
+                  <small>${escapeHtml(parts.year)}.${escapeHtml(parts.month)}</small>
+                </button>
+              </article>
+            `;
+          }).join("") : `<article><strong>还没有已完成旅程</strong><p>完成旅程后会自动出现在这里。</p></article>`}
+        </div>
+      </section>
+    </div>
+  `;
+  modal.hidden = false;
+  modal.querySelector("[data-close-modal]")?.addEventListener("click", () => {
+    modal.hidden = true;
+  });
+  modal.querySelectorAll("[data-open-footprint-trip]").forEach((button) => {
+    button.addEventListener("click", () => {
+      window.location.href = `trips.html#${encodeURIComponent(button.dataset.openFootprintTrip)}`;
+    });
+  });
+}
+
+function openFootprintAchievementList() {
+  const achievements = window.TravelState?.getAchievements?.(readTravelState()) || [];
+  const modal = ensureFootprintModal();
+  modal.innerHTML = `
+    <div class="flow-overlay shared-overlay">
+      <section class="notification-list-modal footprint-notice" role="dialog" aria-modal="true" data-footprint-full-achievements>
+        <button class="shared-close" type="button" aria-label="关闭" data-close-modal>×</button>
+        <h2>完整成就列表</h2>
+        <div>
+          ${achievements.map((item) => `
+            <article class="${item.unlockedAt ? "unread" : ""}">
+              <strong>${escapeHtml(item.title)}</strong>
+              <p>${escapeHtml(item.description)}</p>
+              <small>${item.unlockedAt ? `已解锁 · ${escapeHtml(item.unlockedAt)}` : "未解锁"}</small>
+            </article>
+          `).join("")}
+        </div>
       </section>
     </div>
   `;
@@ -130,8 +255,8 @@ document.querySelector("[data-footprint-share]")?.addEventListener("click", () =
 
 document.querySelectorAll("[data-footprint-list]").forEach((button) => {
   button.addEventListener("click", () => {
-    const type = button.dataset.footprintList === "achievements" ? "完整成就列表" : "完整旅程列表";
-    openFootprintNotice(type, `打开${type}。`);
+    if (button.dataset.footprintList === "achievements") openFootprintAchievementList();
+    else openFootprintTripList();
   });
 });
 
@@ -141,10 +266,16 @@ document.querySelectorAll("[data-trip-detail]").forEach((trip) => {
   });
 });
 
-document.querySelectorAll("[data-achievement]").forEach((card) => {
-  card.addEventListener("click", () => {
-    openFootprintNotice("成就详情", card.querySelector("strong")?.textContent || "成就详情");
-  });
+document.querySelector("[data-footprint-trip-list]")?.addEventListener("click", (event) => {
+  const trip = event.target.closest("[data-trip-detail]");
+  if (trip) window.location.href = `trips.html#${trip.dataset.tripDetail || "trip"}`;
+});
+
+document.querySelector("[data-footprint-achievement-list]")?.addEventListener("click", (event) => {
+  const card = event.target.closest("[data-achievement]");
+  if (card) openFootprintNotice("成就详情", card.querySelector("strong")?.textContent || "成就详情");
 });
 
 hydrateFootprintStats();
+renderFootprintTrips();
+renderFootprintAchievements();

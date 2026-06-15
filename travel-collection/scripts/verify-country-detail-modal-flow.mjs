@@ -1,6 +1,6 @@
 import fs from "node:fs";
 
-const source = fs.readFileSync(new URL("../mobile-app.js", import.meta.url), "utf8");
+const source = fs.readFileSync(new URL("../legacy/mobile-app.js", import.meta.url), "utf8");
 const css = fs.readFileSync(new URL("../mobile.css", import.meta.url), "utf8");
 
 const requiredSource = [
