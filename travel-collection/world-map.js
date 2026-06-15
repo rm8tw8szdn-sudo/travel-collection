@@ -1,13 +1,17 @@
 (function (global) {
   const MAP_TOPOLOGY_URL = "data/countries-50m.json";
   const COUNTRY_META_URL = "data/countries.zh.json";
+  const D3_URL = "vendor/d3.min.js";
+  const TOPOJSON_URL = "vendor/topojson-client.min.js";
   const WIDTH = 960;
   const HEIGHT = 500;
+  const STATIC_PREVIEW_URL = "assets/profile-world-map.svg";
   const EXPLORED_FILL = "#6DBF67";
   const UNEXPLORED_FILL = "#E8ECE6";
   const BORDER_FILL = "#FFFFFF";
 
   let resourcesPromise = null;
+  let libraryPromise = null;
 
   function normalizeNumeric(value) {
     return String(value ?? "").padStart(3, "0");
@@ -18,11 +22,52 @@
   }
 
   function mapUnavailable(container, message = "地图加载中") {
+    if (message === "地图加载中" && container.dataset.worldMapMode === "detail") {
+      renderStaticPreview(container);
+      container.insertAdjacentHTML("beforeend", `<span class="travel-world-map__loading">地图加载中</span>`);
+      return;
+    }
     container.innerHTML = `<div class="travel-world-map__fallback">${message}</div>`;
+  }
+
+  function renderStaticPreview(container) {
+    const state = readState();
+    const exploredCount = (state.countries || []).filter((country) => country.explorationStatus === "explored").length;
+    container.innerHTML = `
+      <img class="travel-world-map__preview" src="${STATIC_PREVIEW_URL}" alt="世界足迹地图预览，已探索 ${exploredCount} 个国家" loading="lazy" decoding="async" />
+    `;
+  }
+
+  function loadScriptOnce(src, globalName) {
+    if (global[globalName]) return Promise.resolve();
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      return new Promise((resolve, reject) => {
+        existing.addEventListener("load", resolve, { once: true });
+        existing.addEventListener("error", reject, { once: true });
+      });
+    }
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.defer = true;
+      script.addEventListener("load", resolve, { once: true });
+      script.addEventListener("error", reject, { once: true });
+      document.head.append(script);
+    });
+  }
+
+  async function ensureMapLibraries() {
+    if (global.d3 && global.topojson) return;
+    if (!libraryPromise) {
+      libraryPromise = loadScriptOnce(D3_URL, "d3").then(() => loadScriptOnce(TOPOJSON_URL, "topojson"));
+    }
+    await libraryPromise;
   }
 
   async function loadResources() {
     if (resourcesPromise) return resourcesPromise;
+    await ensureMapLibraries();
     resourcesPromise = Promise.all([
       fetch(MAP_TOPOLOGY_URL).then((response) => response.json()),
       fetch(COUNTRY_META_URL).then((response) => response.json()),
@@ -112,16 +157,21 @@
   async function renderTravelWorldMaps() {
     const containers = [...document.querySelectorAll("[data-world-map]")];
     if (!containers.length) return;
-    if (!global.d3 || !global.topojson || !global.fetch) {
-      containers.forEach((container) => mapUnavailable(container, "地图资源不可用"));
+    const detailContainers = containers.filter((container) => container.dataset.worldMapMode !== "preview");
+    containers
+      .filter((container) => container.dataset.worldMapMode === "preview")
+      .forEach(renderStaticPreview);
+    if (!detailContainers.length) return;
+    if (!global.fetch) {
+      detailContainers.forEach((container) => mapUnavailable(container, "地图资源不可用"));
       return;
     }
-    containers.forEach((container) => mapUnavailable(container));
+    detailContainers.forEach((container) => mapUnavailable(container));
     try {
       const resources = await loadResources();
-      containers.forEach((container) => renderMap(container, resources));
+      detailContainers.forEach((container) => renderMap(container, resources));
     } catch {
-      containers.forEach((container) => mapUnavailable(container, "地图加载失败"));
+      detailContainers.forEach((container) => mapUnavailable(container, "地图加载失败"));
     }
   }
 

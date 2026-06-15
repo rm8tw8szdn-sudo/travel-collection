@@ -429,7 +429,21 @@ function ensureProfileMapModal() {
 function closeProfileMapModal() {
   const modal = document.querySelector("[data-profile-map-modal]");
   if (modal) modal.hidden = true;
-  document.body.classList.remove("profile-map-modal-open");
+  document.body.classList.remove("profile-map-modal-open", "profile-map-landscape-open");
+}
+
+function syncProfileMapOrientation(modal) {
+  if (!modal) return;
+  const wantsLandscape = modal.classList.contains("is-landscape");
+  document.body.classList.toggle("profile-map-landscape-open", wantsLandscape);
+}
+
+function refreshProfileMapModal(modal) {
+  syncProfileMapOrientation(modal);
+  requestAnimationFrame(() => {
+    window.renderTravelWorldMaps?.();
+    setTimeout(() => window.renderTravelWorldMaps?.(), 120);
+  });
 }
 
 function openProfileMapModal() {
@@ -452,15 +466,17 @@ function openProfileMapModal() {
   `;
   modal.hidden = false;
   document.body.classList.add("profile-map-modal-open");
+  syncProfileMapOrientation(modal);
   modal.querySelectorAll("[data-profile-map-close]").forEach((button) => {
     button.addEventListener("click", closeProfileMapModal);
   });
   modal.querySelector("[data-profile-map-orientation]")?.addEventListener("click", (event) => {
     modal.classList.toggle("is-landscape");
     event.currentTarget.textContent = modal.classList.contains("is-landscape") ? "竖屏" : "横屏";
-    window.renderTravelWorldMaps?.();
+    refreshProfileMapModal(modal);
   });
-  requestAnimationFrame(() => window.renderTravelWorldMaps?.());
+  window.addEventListener("resize", () => refreshProfileMapModal(modal), { once: true });
+  refreshProfileMapModal(modal);
 }
 
 document.querySelectorAll("[data-profile-link]").forEach((button) => {

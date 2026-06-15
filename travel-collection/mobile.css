@@ -3637,6 +3637,14 @@ bottom-tab-bar {
   overflow: hidden;
 }
 
+.profile-map-modal-open .home-tabbar {
+  display: none;
+}
+
+.profile-map-landscape-open {
+  touch-action: none;
+}
+
 .profile-map-zoom-modal[hidden] {
   display: none;
 }
@@ -3644,7 +3652,7 @@ bottom-tab-bar {
 .profile-map-zoom-modal {
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: 260;
   display: grid;
   place-items: center;
   padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
@@ -3734,7 +3742,9 @@ bottom-tab-bar {
 }
 
 .profile-map-zoom-modal.is-landscape .profile-map-zoom-panel {
-  width: min(96vw, 920px);
+  width: calc(100dvw - max(18px, env(safe-area-inset-left)) - max(18px, env(safe-area-inset-right)));
+  max-width: 1120px;
+  max-height: calc(100dvh - max(18px, env(safe-area-inset-top)) - max(18px, env(safe-area-inset-bottom)));
 }
 
 .profile-map-zoom-modal.is-landscape .profile-map-zoom-frame {
@@ -3756,6 +3766,11 @@ bottom-tab-bar {
   .profile-map-zoom-frame {
     height: min(72dvh, 560px);
     min-height: 260px;
+  }
+
+  .profile-map-zoom-modal.is-landscape .profile-map-zoom-frame {
+    height: min(72dvh, 560px);
+    aspect-ratio: auto;
   }
 }
 
@@ -4868,6 +4883,26 @@ bottom-tab-bar {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+.travel-world-map__preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.travel-world-map__loading {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  z-index: 2;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--color-primary-green);
+  font-size: 11px;
+  font-weight: var(--weight-strong);
 }
 
 .travel-world-map__countries path {
