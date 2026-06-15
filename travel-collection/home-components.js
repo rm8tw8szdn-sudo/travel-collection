@@ -83,7 +83,7 @@ class StatCard extends HTMLElement {
       </section>
     `;
     this.querySelector(".home-stat-card")?.addEventListener("click", () => {
-      window.location.href = "footprint.html";
+      window.location.href = "footprint.html?from=home";
     });
   }
 }
@@ -95,7 +95,7 @@ class TripPreviewCard extends HTMLElement {
     const title = trip?.name || this.getAttribute("empty-title") || "暂无待出行";
     const start = trip?.start || trip?.startDate;
     const date = start ? `出发日期：${start}` : this.getAttribute("empty-date") || "从行程页添加计划";
-    const cover = resolveTripCover(trip, state);
+    const cover = homeTripCover(trip, state);
     this.innerHTML = `
       <section class="home-next-section" aria-label="${this.getAttribute("label") || "下一目标"}">
         <h2>${this.getAttribute("label") || "下一目标"}</h2>
@@ -128,7 +128,7 @@ class RecentTripCard extends HTMLElement {
       .join("");
     const title = trip?.name || this.getAttribute("empty-title") || "还没有完成旅程";
     const date = trip?.start && trip?.end ? `${trip.start} - ${shortDate(trip.end)}` : this.getAttribute("empty-date") || "完成旅程后会显示在这里";
-    const cover = resolveTripCover(trip, state);
+    const cover = homeTripCover(trip, state);
 
     this.innerHTML = `
       <section class="home-recent-section" aria-label="最近旅程">
@@ -191,6 +191,12 @@ function getTravelStats(state) {
 
 function resolveTripCover(trip, state) {
   return window.TravelState?.resolveTripCover?.(trip, state) || "assets/home-aurora-cover.svg";
+}
+
+function homeTripCover(trip, state) {
+  if (trip?.id === "trip-nordic") return "assets/country-landmark-norway.jpg";
+  if (trip?.id === "trip-japan-kansai") return "assets/country-landmark-japan.jpg";
+  return resolveTripCover(trip, state);
 }
 
 function tripPlaceNames(trip, state) {

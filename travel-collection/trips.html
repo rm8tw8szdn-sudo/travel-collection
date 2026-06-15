@@ -4,11 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>我的行程</title>
-    <link rel="stylesheet" href="mobile.css?v=trip-budget-sheet-20260615" />
-    <script src="travel-data.js?v=route-accurate-media-20260615" defer></script>
+    <link rel="stylesheet" href="mobile.css?v=trip-ui-polish-20260615" />
+    <script src="travel-data.js?v=route-cover-clean-20260615" defer></script>
     <script src="travel-state.js?v=logic-state-20260607" defer></script>
     <script src="home-components.js?v=home-next-row-20260607" defer></script>
-    <script src="trips.js?v=trip-budget-sheet-20260615" defer></script>
+    <script src="trips.js?v=trip-ui-polish-20260615" defer></script>
     <script src="app-shared.js?v=logic-state-20260607" defer></script>
   </head>
   <body>
@@ -25,7 +25,7 @@
 
       <label class="trip-day-search" aria-label="按天数搜索行程">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.8 18.2a7.4 7.4 0 1 1 0-14.8 7.4 7.4 0 0 1 0 14.8ZM16.2 16.2 21 21"></path></svg>
-        <input type="search" placeholder="按天数搜索，如 8天 / 5-8天" data-trip-day-search />
+        <input type="search" placeholder="" data-trip-day-search />
       </label>
       <p class="trip-search-summary" hidden data-trip-search-summary></p>
 
@@ -102,6 +102,7 @@
 
       <div class="trip-create-modal trip-detail-modal" hidden data-trip-detail-modal></div>
       <div class="trip-create-modal trip-detail-modal" hidden data-trip-budget-modal></div>
+      <input type="file" accept="image/*" data-trip-cover-file hidden />
 
       <bottom-tab-bar active="行程"></bottom-tab-bar>
     </main>

@@ -64,6 +64,7 @@ function renderRouteDetailState() {
   document.querySelector("[data-route-name]")?.replaceChildren(route.name);
   document.querySelector("[data-route-places]")?.replaceChildren(route.kind === "单国城市路线" ? places.cities.join(" · ") : places.countries.join(" · "));
   document.querySelector("[data-route-reason]")?.replaceChildren(routeRecommendation(route, places));
+  renderHighlightText(route, places);
   document.querySelector("[data-route-days]")?.replaceChildren(route.days || "待定");
   document.querySelector("[data-route-season]")?.replaceChildren(route.season || "按季节");
   document.querySelector("[data-route-budget]")?.replaceChildren(route.budgetLevel || "中等");
@@ -71,8 +72,23 @@ function renderRouteDetailState() {
   favoriteButton?.classList.toggle("favorited", route.isFavorite);
   favoriteButton?.setAttribute("aria-pressed", String(route.isFavorite));
   renderCities(route, state);
-  renderHighlights(route);
   renderRelated(route, state);
+}
+
+function routeHighlightSentence(route, places) {
+  const tags = (route.tags || []).slice(0, 4);
+  const cityText = places.cities.slice(0, 3).join("、");
+  const countryText = places.countries.slice(0, 3).join("、");
+  const placeText = route.kind === "单国城市路线" && cityText ? cityText : countryText;
+  const themeText = tags.length ? tags.join("、") : "目的地特色";
+  const placePrefix = placeText ? `${placeText}串联` : "";
+  return `路线亮点：${placePrefix}${themeText}主题，适合按兴趣和季节节奏轻量收集。`;
+}
+
+function renderHighlightText(route, places) {
+  const node = document.querySelector("[data-route-highlight-text]");
+  if (!node) return;
+  node.textContent = routeHighlightSentence(route, places);
 }
 
 function renderCities(route, state) {
@@ -93,18 +109,6 @@ function renderCities(route, state) {
       </a>
     `;
   }).join("");
-}
-
-function renderHighlights(route) {
-  const grid = document.querySelector("[data-route-highlights] .route-highlight-grid");
-  if (!grid) return;
-  const highlights = (route.tags || []).slice(0, 4);
-  grid.innerHTML = highlights.map((tag) => `
-    <article>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.3 5 5.2-1.5-2.2 5 4 3.8-5.5.6-.8 5.4-4-3.8-4.7 2.8.8-5.4-5-2.4 4.7-2.8L6.6 4.2Z"></path></svg>
-      <span><strong>${escapeHtml(tag)}</strong><em>${escapeHtml(route.reason || "路线亮点")}</em></span>
-    </article>
-  `).join("");
 }
 
 function renderRelated(route, state) {

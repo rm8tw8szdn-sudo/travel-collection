@@ -309,11 +309,10 @@ function profileAchievementItems() {
   });
 }
 
-function achievementCardMarkup(item, index) {
+function achievementCardMarkup(item) {
   const isUnlocked = Boolean(item.unlockedAt);
   return `
     <button class="achievement-card ${isUnlocked ? "is-unlocked" : "is-locked"}" type="button" data-achievement-card="${escapeHtml(item.id)}" data-achievement-state="${isUnlocked ? "unlocked" : "locked"}">
-      <span class="achievement-index">${index + 1}</span>
       <img src="${escapeHtml(item.art)}" alt="${escapeHtml(item.name)}徽章" />
       <strong>${escapeHtml(item.name)}</strong>
     </button>

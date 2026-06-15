@@ -6,6 +6,7 @@ const tripDetailModal = document.querySelector("[data-trip-detail-modal]");
 const tripBudgetModal = document.querySelector("[data-trip-budget-modal]");
 const tripDaySearchInput = document.querySelector("[data-trip-day-search]");
 const tripSearchSummary = document.querySelector("[data-trip-search-summary]");
+const tripCoverFileInput = document.querySelector("[data-trip-cover-file]");
 let tripOverviewModal = document.querySelector("[data-trip-overview-modal]");
 
 let tripStep = 1;
@@ -14,6 +15,7 @@ let activeTripId = "";
 let activeUpcomingFilter = "all";
 let activeCompletedFilter = "all";
 let activeTripDaySearch = "";
+let pendingCoverTripId = "";
 
 const tripPhoto = (id) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=900&q=80`;
 const CITY_SPOT_COVERS = {
@@ -190,13 +192,22 @@ function tripCountdown(trip) {
   return days ? `还有 ${days} 天` : "今天出发";
 }
 
-function tripBudgetText(trip) {
+function tripBudgetTotalFromState(trip, state = readTravelState()) {
+  const items = window.TravelState?.getTripBudgetItems?.(state, trip.id) || [];
+  const total = items.reduce((sum, item) => sum + budgetAmountValue(item.amount), 0);
+  return total > 0 ? formatBudgetAmount(total) : "";
+}
+
+function tripBudgetText(trip, state = readTravelState()) {
+  const sheetTotal = tripBudgetTotalFromState(trip, state);
   if (trip.status === "completed") {
+    if (sheetTotal) return `实际花费 ￥${sheetTotal}`;
     if (trip.actualBudget) return `实际花费 ￥${trip.actualBudget}`;
     if (trip.id === "trip-japan-kansai") return "实际花费 ￥8,650";
     if (trip.id.includes("turkey")) return "实际花费 ￥9,800";
     return "实际花费待补";
   }
+  if (sheetTotal) return `预计 ￥${sheetTotal}`;
   if (trip.budget && /\d/.test(String(trip.budget))) return `预计 ￥${trip.budget}`;
   if (trip.id === "trip-nordic") return "预计 ￥18,000";
   if (trip.id === "trip-japan-kansai") return "预计 ￥8,000";
@@ -224,15 +235,17 @@ function tripRouteItem(trip, state) {
   return state.routesById?.[trip.sourceRouteId] || state.routesById?.[trip.routeId] || null;
 }
 
-function tripBudgetValue(trip) {
-  const text = tripBudgetText(trip).replace(/^预计\s*/, "").replace(/^实际花费\s*/, "");
+function tripBudgetValue(trip, state = readTravelState()) {
+  const text = tripBudgetText(trip, state).replace(/^预计\s*/, "").replace(/^实际花费\s*/, "");
   return text || trip.budget || "待定";
 }
 
-function tripBudgetInputValue(trip) {
+function tripBudgetInputValue(trip, state = readTravelState()) {
+  const sheetTotal = tripBudgetTotalFromState(trip, state);
+  if (sheetTotal) return sheetTotal;
   const rawBudget = String(trip.budget || "").trim();
   if (/\d/.test(rawBudget)) return rawBudget.replace(/[^\d.]/g, "");
-  const displayBudget = tripBudgetValue(trip);
+  const displayBudget = tripBudgetValue(trip, state);
   const matched = String(displayBudget || "").match(/[\d,.]+/);
   return matched ? matched[0].replace(/[^\d.]/g, "") : "";
 }
@@ -330,7 +343,7 @@ function renderOverviewGrid(trip, state, completed) {
       </article>
       <article>
         ${tripIcons.budget}
-        <span><small>${completed ? "实际花费" : "预算"}</small><strong>${escapeHtml(tripBudgetValue(trip))}</strong></span>
+        <span><small>${completed ? "实际花费" : "预算"}</small><strong>${escapeHtml(tripBudgetValue(trip, state))}</strong></span>
       </article>
     </div>
   `;
@@ -442,7 +455,7 @@ function renderTripCard(trip, state) {
           <strong>${escapeHtml(trip.name || "未命名行程")}</strong>
           <em>${escapeHtml(tripPlaceText(trip, state))}</em>
           <small class="trip-date-line">${tripIcons.calendar}${escapeHtml(tripDateRange(trip))}</small>
-          <small class="trip-budget-line">${escapeHtml(dayText)}　|　${escapeHtml(tripBudgetText(trip))}</small>
+          <small class="trip-budget-line">${escapeHtml(dayText)}　|　${escapeHtml(tripBudgetText(trip, state))}</small>
         </span>
         <span class="trip-status ${completed ? "done" : "planning"}">${escapeHtml(tripCountdown(trip))}</span>
       </span>
@@ -536,12 +549,13 @@ function autoTripName(countryIds, state) {
 
 function buildTripFromForm() {
   const state = readTravelState();
-  const places = selectedPlaceNames();
+  const explicitName = document.querySelector("[data-trip-name-input]")?.value.trim();
+  const searchPlace = document.querySelector("[data-place-search]")?.value.trim();
+  const places = [...new Set([...selectedPlaceNames(), searchPlace, explicitName].filter(Boolean))];
   const resolvedPlaces = resolvePlaces(places, state);
   const cityCountryIds = resolvedPlaces.cityIds.map((id) => state.citiesById?.[id]?.countryId).filter(Boolean);
   const countryIds = [...new Set([...resolvedPlaces.countryIds, ...cityCountryIds])];
   const cityIds = resolvedPlaces.cityIds;
-  const explicitName = document.querySelector("[data-trip-name-input]")?.value.trim();
   const trip = {
     id: `trip-${Date.now()}`,
     name: explicitName || autoTripName(countryIds, state),
@@ -565,7 +579,7 @@ function updateTripPreview() {
   if (!preview) return;
   const state = readTravelState();
   const trip = buildTripFromForm();
-  preview.querySelector("img").src = resolveTripCover(trip, state);
+  preview.querySelector("img").src = trip.cover || resolveTripCover(trip, state);
   preview.querySelector("b").textContent = trip.name;
   preview.querySelector("em").textContent = tripPlaceText(trip, state);
   const small = preview.querySelectorAll("small");
@@ -620,7 +634,7 @@ function renderTripDetail(id) {
       </section>
       <figure class="trip-detail-hero">
         <img src="${escapeHtml(resolveTripCover(trip, state))}" alt="${escapeHtml(trip.name)}封面图" />
-        <button type="button">更换封面</button>
+        <button type="button" data-change-trip-cover="${escapeHtml(trip.id)}">更换封面</button>
       </figure>
       ${completed ? `
         <section class="trip-complete-callout">
@@ -740,10 +754,9 @@ function openTripOverviewEditor(id) {
   modal.innerHTML = `
     <section class="trip-create-panel trip-detail-panel trip-overview-editor-panel" role="dialog" aria-modal="true" aria-label="编辑行程概览">
       <header class="trip-detail-head">
-        <button type="button" aria-label="返回行程详情" data-trip-overview-close="${escapeHtml(id)}">‹</button>
+        <button type="button" aria-label="返回行程详情" data-trip-overview-close="${escapeHtml(id)}">${tripIcons.back}</button>
         <span>
-          <strong>编辑行程概览</strong>
-          <em>${escapeHtml(trip.name || "未命名行程")}</em>
+          <strong>${escapeHtml(trip.name || "未命名行程")}</strong>
         </span>
       </header>
       <form class="trip-overview-editor-form" data-trip-overview-form>
@@ -771,7 +784,7 @@ function openTripOverviewEditor(id) {
         </div>
         <label>
           <span>预算</span>
-          <input type="text" inputmode="numeric" placeholder="例如 18000" value="${escapeHtml(tripBudgetInputValue(trip))}" data-trip-overview-budget />
+          <input type="text" inputmode="numeric" placeholder="例如 18000" value="${escapeHtml(tripBudgetInputValue(trip, state))}" data-trip-overview-budget />
         </label>
       </form>
       <div class="trip-overview-editor-actions">
@@ -803,17 +816,11 @@ function renderBudgetPage(id) {
   tripBudgetModal.innerHTML = `
     <section class="trip-create-panel trip-detail-panel trip-budget-panel" role="dialog" aria-modal="true" aria-label="${escapeHtml(trip.name)}预算">
       <header class="trip-detail-head">
-        <button type="button" aria-label="返回行程详情" data-back-trip-detail="${escapeHtml(trip.id)}">‹</button>
+        <button type="button" aria-label="返回行程详情" data-back-trip-detail="${escapeHtml(trip.id)}">${tripIcons.back}</button>
         <span>
-          <strong>预算</strong>
-          <em>${escapeHtml(trip.name)}</em>
+          <strong>${escapeHtml(trip.name)}</strong>
         </span>
       </header>
-      <section class="trip-detail-summary">
-        <span><i>${trip.status === "completed" ? "实际花费" : "总预算"}</i><b>${escapeHtml(tripBudgetValue(trip))}</b></span>
-        <span><i>已记录</i><b>${actualTotal}</b></span>
-        <span><i>货币</i><b>${escapeHtml(trip.currency || "CNY")}</b></span>
-      </section>
       <div class="budget-sheet" data-budget-sheet>
         <div class="budget-sheet-head"><span>项目</span><span>金额</span></div>
         <div class="budget-sheet-rows" data-budget-rows>
@@ -825,7 +832,7 @@ function renderBudgetPage(id) {
         </div>
       </div>
       <div class="budget-editor">
-        <button class="secondary" type="button" data-add-budget-row>添加一行</button>
+        <button class="secondary budget-add-row-button" type="button" aria-label="添加预算行" data-add-budget-row>+</button>
         <button type="button" data-save-budget-items="${escapeHtml(trip.id)}">保存预算</button>
       </div>
     </section>
@@ -872,6 +879,25 @@ function updateBudgetTotal() {
   const total = budgetItemsFromSheet().reduce((sum, item) => sum + budgetAmountValue(item.amount), 0);
   const totalNode = tripBudgetModal?.querySelector("[data-budget-total]");
   if (totalNode) totalNode.textContent = `以上：${formatBudgetAmount(total)}`;
+  return total;
+}
+
+function persistBudgetSheet(id) {
+  const items = budgetItemsFromSheet().map((item) => ({ ...item, tripId: id }));
+  const total = updateBudgetTotal();
+  updateTravelState((state) => {
+    const budgetItems = { ...(state.budgetItems || {}) };
+    budgetItems[id] = items;
+    state.budgetItems = budgetItems;
+    state.trips = (state.trips || []).map((trip) => {
+      if (trip.id !== id) return trip;
+      const value = formatBudgetAmount(total);
+      return trip.status === "completed"
+        ? { ...trip, actualBudget: value }
+        : { ...trip, budget: value };
+    });
+    return state;
+  });
   return total;
 }
 
@@ -1113,6 +1139,13 @@ document.querySelector(".trip-screen")?.addEventListener("click", (event) => {
     return;
   }
 
+  const changeCover = event.target.closest("[data-change-trip-cover]");
+  if (changeCover) {
+    pendingCoverTripId = changeCover.dataset.changeTripCover || "";
+    tripCoverFileInput?.click();
+    return;
+  }
+
   const backTrip = event.target.closest("[data-back-trip-detail]");
   if (backTrip) {
     closeLayer(tripBudgetModal);
@@ -1121,7 +1154,9 @@ document.querySelector(".trip-screen")?.addEventListener("click", (event) => {
   }
 
   if (event.target.closest("[data-calculate-budget-total]")) {
-    updateBudgetTotal();
+    const id = tripBudgetModal?.querySelector("[data-save-budget-items]")?.dataset.saveBudgetItems;
+    if (id) persistBudgetSheet(id);
+    else updateBudgetTotal();
     return;
   }
 
@@ -1133,25 +1168,16 @@ document.querySelector(".trip-screen")?.addEventListener("click", (event) => {
   const saveBudget = event.target.closest("[data-save-budget-items]");
   if (saveBudget) {
     const id = saveBudget.dataset.saveBudgetItems;
-    const items = budgetItemsFromSheet().map((item) => ({ ...item, tripId: id }));
-    const total = updateBudgetTotal();
-    updateTravelState((state) => {
-      const budgetItems = { ...(state.budgetItems || {}) };
-      budgetItems[id] = items;
-      state.budgetItems = budgetItems;
-      state.trips = (state.trips || []).map((trip) => {
-        if (trip.id !== id) return trip;
-        return trip.status === "completed"
-          ? { ...trip, actualBudget: formatBudgetAmount(total) }
-          : { ...trip, budget: formatBudgetAmount(total) };
-      });
-      return state;
-    });
+    persistBudgetSheet(id);
     renderBudgetPage(id);
   }
 });
 
 document.querySelector(".trip-screen")?.addEventListener("input", (event) => {
+  if (tripBudgetModal && !tripBudgetModal.hidden && event.target.closest("[data-budget-item-amount]")) {
+    updateBudgetTotal();
+    return;
+  }
   if (!tripOverviewModal || tripOverviewModal.hidden) return;
   if (event.target.closest("[data-trip-overview-country-search]")) {
     updateOverviewEditorCountryUi(tripOverviewModal, readTravelState());
@@ -1160,6 +1186,26 @@ document.querySelector(".trip-screen")?.addEventListener("input", (event) => {
   if (event.target.closest("[data-trip-overview-start], [data-trip-overview-end]")) {
     updateOverviewEditorDuration(tripOverviewModal);
   }
+});
+
+tripCoverFileInput?.addEventListener("change", () => {
+  const file = tripCoverFileInput.files?.[0];
+  const id = pendingCoverTripId;
+  pendingCoverTripId = "";
+  if (!file || !id) return;
+  const reader = new FileReader();
+  reader.addEventListener("load", () => {
+    const dataUrl = String(reader.result || "");
+    if (!dataUrl) return;
+    updateTravelState((state) => {
+      state.trips = (state.trips || []).map((trip) => trip.id === id ? { ...trip, cover: dataUrl } : trip);
+      return state;
+    });
+    renderTripLists();
+    renderTripDetail(id);
+    tripCoverFileInput.value = "";
+  });
+  reader.readAsDataURL(file);
 });
 
 renderTripLists();

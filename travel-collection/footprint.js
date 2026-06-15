@@ -32,8 +32,15 @@ const defaultFootprint = {
   completedTrips: 8,
 };
 
-document.querySelector("[data-footprint-back]")?.addEventListener("click", () => {
-  window.location.href = "profile.html";
+const footprintBackButton = document.querySelector("[data-footprint-back]");
+const footprintSource = new URLSearchParams(window.location.search).get("from");
+if (footprintBackButton && footprintSource === "home") {
+  footprintBackButton.setAttribute("aria-label", "返回首页");
+}
+
+footprintBackButton?.addEventListener("click", () => {
+  const from = new URLSearchParams(window.location.search).get("from");
+  window.location.href = from === "home" ? "mobile.html" : "profile.html";
 });
 
 function readTravelState() {
