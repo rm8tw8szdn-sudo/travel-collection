@@ -8,6 +8,7 @@ const citySpots = document.querySelector("[data-city-spots]");
 const favoriteButton = document.querySelector("[data-city-favorite]");
 const markExploredButton = document.querySelector("[data-city-mark-explored]");
 const addTripButton = document.querySelector("[data-city-add-trip]");
+let activeCityDetail = null;
 
 function readState() {
   return window.TravelState?.readTravelState?.() || {};
@@ -21,22 +22,44 @@ function currentCity(state = readState()) {
   return state.citiesById?.[cityId] || state.citiesById?.["NO-OSL"];
 }
 
+function cityDetailData(city, state) {
+  const base = window.DetailEnrichment?.baseCity?.(city, state) || {};
+  return activeCityDetail?.id === city.id ? { ...base, ...activeCityDetail } : base;
+}
+
+function detailStatusNode() {
+  let node = document.querySelector("[data-detail-enrichment-status]");
+  if (node) return node;
+  node = document.createElement("p");
+  node.className = "detail-enrichment-status";
+  node.setAttribute("data-detail-enrichment-status", "");
+  document.querySelector(".route-detail-content")?.prepend(node);
+  return node;
+}
+
+function setDetailStatus(message) {
+  const node = detailStatusNode();
+  node.textContent = message || "";
+  node.hidden = !message;
+}
+
 function renderCity() {
   const state = readState();
   const city = currentCity(state);
   const country = state.countriesById?.[city.countryId] || {};
+  const detail = cityDetailData(city, state);
   if (cityName) cityName.textContent = city.name;
   if (cityCountry) cityCountry.textContent = country.name || "";
-  if (cityIntro) cityIntro.textContent = city.intro || "";
+  if (cityIntro) cityIntro.textContent = detail.description || city.intro || "";
   if (cityCover) {
-    cityCover.src = city.cover || country.cover || "assets/route-city-oslo.svg";
+    cityCover.src = detail.coverImage || city.cover || country.cover || "assets/route-city-oslo.svg";
     cityCover.alt = `${city.name}封面图`;
   }
   if (cityTags) {
-    cityTags.innerHTML = (city.tags || []).map((tag) => `<span>${tag}</span>`).join("");
+    cityTags.innerHTML = (detail.tags || city.tags || []).map((tag) => `<span>${tag}</span>`).join("");
   }
   if (citySpots) {
-    citySpots.innerHTML = (city.spots || []).slice(0, 5).map((spot) => `<span>${spot}</span>`).join("");
+    citySpots.innerHTML = (detail.representativeSpots || city.spots || []).slice(0, 5).map((spot) => `<span>${spot}</span>`).join("");
   }
   favoriteButton?.classList.toggle("favorited", city.isFavorite);
   if (markExploredButton) markExploredButton.textContent = city.explorationStatus === "explored" ? "已探索" : "标记已探索";
@@ -96,4 +119,22 @@ document.querySelectorAll("[data-city-share]").forEach((button) => {
   });
 });
 
-renderCity();
+async function initCityDetail() {
+  renderCity();
+  const state = readState();
+  const city = currentCity(state);
+  if (!city || !window.DetailEnrichment?.ensureDetailData) return;
+  const base = window.DetailEnrichment.baseCity(city, state);
+  if (window.DetailEnrichment.completionScore("city", base) >= 90) return;
+  setDetailStatus("正在补全旅行灵感…");
+  const result = await window.DetailEnrichment.ensureDetailData("city", city.id, base, state);
+  if (result.status === "failed") {
+    setDetailStatus("暂时无法补全更多信息。");
+    return;
+  }
+  activeCityDetail = result.data;
+  setDetailStatus("");
+  renderCity();
+}
+
+initCityDetail();

@@ -806,33 +806,40 @@ function renderBudgetPage(id) {
   if (!trip || !tripBudgetModal) return;
   const items = window.TravelState?.getTripBudgetItems?.(state, id) || [];
   const budgetRows = items.length ? items : [
-    { name: "机票", amount: "" },
-    { name: "酒店", amount: "" },
-    { name: "交通", amount: "" },
-    { name: "门票", amount: "" },
-    { name: "餐饮", amount: "" },
+    { name: "机票", amount: "5000" },
+    { name: "酒店", amount: "6000" },
+    { name: "交通", amount: "1500" },
+    { name: "门票", amount: "1000" },
+    { name: "餐饮", amount: "2500" },
   ];
   const actualTotal = budgetRows.reduce((sum, item) => sum + budgetAmountValue(item.amount), 0);
   tripBudgetModal.innerHTML = `
     <section class="trip-create-panel trip-detail-panel trip-budget-panel" role="dialog" aria-modal="true" aria-label="${escapeHtml(trip.name)}预算">
-      <header class="trip-detail-head">
+      <header class="budget-page-head">
         <button type="button" aria-label="返回行程详情" data-back-trip-detail="${escapeHtml(trip.id)}">${tripIcons.back}</button>
-        <span>
-          <strong>${escapeHtml(trip.name)}</strong>
-        </span>
+        <strong>${escapeHtml(trip.name)}</strong>
+        <span aria-hidden="true"></span>
       </header>
+      <figure class="budget-hero" data-budget-hero>
+        <img src="${escapeHtml(resolveTripCover(trip, state))}" alt="${escapeHtml(trip.name)}封面图" />
+        <span class="budget-hero-shade"></span>
+        <figcaption>
+          <small>预计预算</small>
+          <strong data-budget-hero-total>${escapeHtml(formatBudgetCurrency(actualTotal))}</strong>
+          <em>合理规划预算，让旅行更安心</em>
+        </figcaption>
+      </figure>
       <div class="budget-sheet" data-budget-sheet>
-        <div class="budget-sheet-head"><span>项目</span><span>金额</span></div>
         <div class="budget-sheet-rows" data-budget-rows>
           ${budgetRows.map((item) => budgetRowTemplate(item)).join("")}
         </div>
-        <div class="budget-sheet-total">
+        <button class="budget-add-row-button" type="button" aria-label="添加预算项目" data-add-budget-row>＋</button>
+        <div class="budget-total-row">
           <button type="button" data-calculate-budget-total>计算总和</button>
-          <strong data-budget-total>以上：${formatBudgetAmount(actualTotal)}</strong>
+          <strong data-budget-total>以上： ${escapeHtml(formatBudgetAmount(actualTotal))}</strong>
         </div>
       </div>
       <div class="budget-editor">
-        <button class="secondary budget-add-row-button" type="button" aria-label="添加预算行" data-add-budget-row>+</button>
         <button type="button" data-save-budget-items="${escapeHtml(trip.id)}">保存预算</button>
       </div>
     </section>
@@ -850,11 +857,21 @@ function formatBudgetAmount(value) {
   return Number.isInteger(amount) ? String(amount) : amount.toFixed(2);
 }
 
+function formatBudgetCurrency(value) {
+  const amount = Math.round(Number(value) || 0);
+  return `¥${amount.toLocaleString("en-US")}`;
+}
+
 function budgetRowTemplate(item = {}) {
   return `
     <label class="budget-row">
-      <input type="text" placeholder="项目" value="${escapeHtml(item.name || "")}" data-budget-item-name />
-      <input type="text" inputmode="decimal" placeholder="金额" value="${escapeHtml(item.amount || "")}" data-budget-item-amount />
+      <span class="budget-item-field">
+        <input type="text" placeholder="项目" value="${escapeHtml(item.name || "")}" data-budget-item-name />
+      </span>
+      <span class="budget-amount-field">
+        <em>¥</em>
+        <input type="text" inputmode="decimal" placeholder="金额" value="${escapeHtml(item.amount || "")}" data-budget-item-amount />
+      </span>
     </label>
   `;
 }
@@ -878,7 +895,9 @@ function budgetItemsFromSheet() {
 function updateBudgetTotal() {
   const total = budgetItemsFromSheet().reduce((sum, item) => sum + budgetAmountValue(item.amount), 0);
   const totalNode = tripBudgetModal?.querySelector("[data-budget-total]");
-  if (totalNode) totalNode.textContent = `以上：${formatBudgetAmount(total)}`;
+  if (totalNode) totalNode.textContent = `以上： ${formatBudgetAmount(total)}`;
+  const heroTotalNode = tripBudgetModal?.querySelector("[data-budget-hero-total]");
+  if (heroTotalNode) heroTotalNode.textContent = formatBudgetCurrency(total);
   return total;
 }
 
@@ -1154,9 +1173,7 @@ document.querySelector(".trip-screen")?.addEventListener("click", (event) => {
   }
 
   if (event.target.closest("[data-calculate-budget-total]")) {
-    const id = tripBudgetModal?.querySelector("[data-save-budget-items]")?.dataset.saveBudgetItems;
-    if (id) persistBudgetSheet(id);
-    else updateBudgetTotal();
+    updateBudgetTotal();
     return;
   }
 

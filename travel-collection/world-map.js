@@ -12,6 +12,7 @@
 
   let resourcesPromise = null;
   let libraryPromise = null;
+  let previewUpgradeScheduled = false;
 
   function normalizeNumeric(value) {
     return String(value ?? "").padStart(3, "0");
@@ -155,13 +156,37 @@
     }
   }
 
+  function upgradePreviewMaps(containers) {
+    const liveContainers = () => containers.filter((container) => container.isConnected);
+    if (!liveContainers().length || !global.fetch) return;
+    const run = async () => {
+      try {
+        const resources = await loadResources();
+        liveContainers().forEach((container) => renderMap(container, resources));
+      } catch {
+        liveContainers().forEach((container) => mapUnavailable(container, "地图加载失败"));
+      }
+    };
+    if (resourcesPromise) {
+      run();
+      return;
+    }
+    if (previewUpgradeScheduled) return;
+    previewUpgradeScheduled = true;
+    if (typeof global.requestIdleCallback === "function") {
+      global.requestIdleCallback(run, { timeout: 1400 });
+    } else {
+      global.setTimeout(run, 700);
+    }
+  }
+
   async function renderTravelWorldMaps() {
     const containers = [...document.querySelectorAll("[data-world-map]")];
     if (!containers.length) return;
     const detailContainers = containers.filter((container) => container.dataset.worldMapMode !== "preview");
-    containers
-      .filter((container) => container.dataset.worldMapMode === "preview")
-      .forEach(renderStaticPreview);
+    const previewContainers = containers.filter((container) => container.dataset.worldMapMode === "preview");
+    previewContainers.forEach(renderStaticPreview);
+    if (previewContainers.length) upgradePreviewMaps(previewContainers);
     if (!detailContainers.length) return;
     if (!global.fetch) {
       detailContainers.forEach((container) => mapUnavailable(container, "地图资源不可用"));

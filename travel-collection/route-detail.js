@@ -5,6 +5,7 @@ document.querySelector("[data-route-back]")?.addEventListener("click", () => {
 const routeId = decodeURIComponent(window.location.hash.replace(/^#/, "")) || "nordic-aurora";
 const favoriteButton = document.querySelector("[data-route-favorite]");
 const addRouteButton = document.querySelector("[data-route-add-trip]");
+let activeRouteDetail = null;
 
 function readState() {
   return window.TravelState?.readTravelState?.() || {};
@@ -26,10 +27,42 @@ function currentRoute(state = readState()) {
   return state.routesById?.[routeId] || state.routesById?.["nordic-aurora"];
 }
 
+function routeDetailData(route, state) {
+  const base = window.DetailEnrichment?.baseRoute?.(route, state) || {};
+  return activeRouteDetail?.id === route.id ? { ...base, ...activeRouteDetail } : base;
+}
+
+function budgetLabel(value) {
+  if (value === "low") return "低";
+  if (value === "high") return "中高";
+  if (value === "medium") return "中等";
+  return value || "中等";
+}
+
+function detailStatusNode() {
+  let node = document.querySelector("[data-detail-enrichment-status]");
+  if (node) return node;
+  node = document.createElement("p");
+  node.className = "detail-enrichment-status";
+  node.setAttribute("data-detail-enrichment-status", "");
+  document.querySelector(".route-detail-content")?.prepend(node);
+  return node;
+}
+
+function setDetailStatus(message) {
+  const node = detailStatusNode();
+  node.textContent = message || "";
+  node.hidden = !message;
+}
+
 function routePlaceNames(route, state) {
   return {
     countries: (route.countryIds || []).map((id) => state.countriesById?.[id]?.name || id),
-    cities: (route.cityIds || []).map((id) => state.citiesById?.[id]?.name || id),
+    cities: [
+      ...(route.cityIds || []).map((id) => state.citiesById?.[id]?.name || id),
+      ...(route.cityNames || []),
+      ...(route.candidateCityNames || []),
+    ].filter(Boolean),
   };
 }
 
@@ -54,20 +87,21 @@ function renderRouteDetailState() {
   const route = currentRoute(state);
   if (!route) return;
   const places = routePlaceNames(route, state);
+  const detail = routeDetailData(route, state);
   document.title = `${route.name} · 路线详情`;
   document.querySelector(".route-detail-screen")?.setAttribute("aria-label", `${route.name}路线详情`);
   const hero = document.querySelector(".route-detail-hero img");
   if (hero) {
-    hero.src = route.cover || "assets/home-aurora-cover.svg";
+    hero.src = detail.coverImage || route.cover || "assets/home-aurora-cover.svg";
     hero.alt = `${route.name}封面图`;
   }
   document.querySelector("[data-route-name]")?.replaceChildren(route.name);
   document.querySelector("[data-route-places]")?.replaceChildren(route.kind === "单国城市路线" ? places.cities.join(" · ") : places.countries.join(" · "));
-  document.querySelector("[data-route-reason]")?.replaceChildren(routeRecommendation(route, places));
-  renderHighlightText(route, places);
-  document.querySelector("[data-route-days]")?.replaceChildren(route.days || "待定");
-  document.querySelector("[data-route-season]")?.replaceChildren(route.season || "按季节");
-  document.querySelector("[data-route-budget]")?.replaceChildren(route.budgetLevel || "中等");
+  document.querySelector("[data-route-reason]")?.replaceChildren(routeRecommendation({ ...route, reason: detail.description || route.reason }, places));
+  renderHighlightText(route, places, detail);
+  document.querySelector("[data-route-days]")?.replaceChildren(detail.recommendedDays || route.days || "待定");
+  document.querySelector("[data-route-season]")?.replaceChildren(detail.bestSeason || route.season || "按季节");
+  document.querySelector("[data-route-budget]")?.replaceChildren(budgetLabel(detail.budgetLevel || route.budgetLevel));
   if (addRouteButton) addRouteButton.dataset.routeAddTrip = route.id;
   favoriteButton?.classList.toggle("favorited", route.isFavorite);
   favoriteButton?.setAttribute("aria-pressed", String(route.isFavorite));
@@ -75,7 +109,8 @@ function renderRouteDetailState() {
   renderRelated(route, state);
 }
 
-function routeHighlightSentence(route, places) {
+function routeHighlightSentence(route, places, detail = {}) {
+  if ((detail.highlights || []).length) return `路线亮点：${detail.highlights.slice(0, 4).join("；")}。`;
   const tags = (route.tags || []).slice(0, 4);
   const cityText = places.cities.slice(0, 3).join("、");
   const countryText = places.countries.slice(0, 3).join("、");
@@ -85,10 +120,10 @@ function routeHighlightSentence(route, places) {
   return `路线亮点：${placePrefix}${themeText}主题，适合按兴趣和季节节奏轻量收集。`;
 }
 
-function renderHighlightText(route, places) {
+function renderHighlightText(route, places, detail = {}) {
   const node = document.querySelector("[data-route-highlight-text]");
   if (!node) return;
-  node.textContent = routeHighlightSentence(route, places);
+  node.textContent = routeHighlightSentence(route, places, detail);
 }
 
 function renderCities(route, state) {
@@ -151,4 +186,22 @@ addRouteButton?.addEventListener("click", () => {
   });
 });
 
-renderRouteDetailState();
+async function initRouteDetail() {
+  renderRouteDetailState();
+  const state = readState();
+  const route = currentRoute(state);
+  if (!route || !window.DetailEnrichment?.ensureDetailData) return;
+  const base = window.DetailEnrichment.baseRoute(route, state);
+  if (window.DetailEnrichment.completionScore("route", base) >= 90) return;
+  setDetailStatus("正在补全旅行灵感…");
+  const result = await window.DetailEnrichment.ensureDetailData("route", route.id, base, state);
+  if (result.status === "failed") {
+    setDetailStatus("暂时无法补全更多信息。");
+    return;
+  }
+  activeRouteDetail = result.data;
+  setDetailStatus("");
+  renderRouteDetailState();
+}
+
+initRouteDetail();

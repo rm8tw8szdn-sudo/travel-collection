@@ -337,6 +337,7 @@
       notifications: [
         { id: "notification-system-welcome", type: "系统通知", text: "旅行收藏册已接入统一状态。", time: "今天", read: false },
       ],
+      detailCache: [],
       manualVisitRecords: [],
       manualExploredCountryIds: [],
       manualExploredCityIds: [],
@@ -357,6 +358,7 @@
       budgetItems: [],
       achievements: [],
       notifications: [],
+      detailCache: [],
       manualVisitRecords: [],
       manualExploredCountryIds: [],
       manualExploredCityIds: [],
@@ -466,6 +468,17 @@
       time: item.time || "刚刚",
       read: Boolean(item.read),
     }));
+  }
+
+  function normalizeDetailCache(value) {
+    return normalizeList(value).map((item) => ({
+      targetType: item.targetType || "",
+      targetId: item.targetId || "",
+      data: item.data && typeof item.data === "object" ? item.data : {},
+      source: item.source || "web",
+      updatedAt: item.updatedAt || todayText(),
+      expiresAt: item.expiresAt || "",
+    })).filter((item) => item.targetType && item.targetId);
   }
 
   function todayText() {
@@ -851,6 +864,7 @@
       budgetItems: normalizeBudgetItems(source.budgetItems),
       achievements,
       notifications: normalizeNotifications(source.notifications),
+      detailCache: normalizeDetailCache(source.detailCache),
       manualVisitRecords,
       manualExploredCountryIds,
       manualExploredCityIds,
@@ -985,12 +999,213 @@
     return recalculateTravelState(normalized);
   }
 
+  function detailCacheKey(targetType, targetId) {
+    return `${targetType}:${targetId}`;
+  }
+
+  function getDetailCache(state = {}, targetType, targetId) {
+    const now = Date.now();
+    const cache = normalizeDetailCache(state.detailCache);
+    return cache.find((item) => (
+      detailCacheKey(item.targetType, item.targetId) === detailCacheKey(targetType, targetId)
+      && (!item.expiresAt || new Date(item.expiresAt).getTime() > now)
+    )) || null;
+  }
+
+  function setDetailCache(state = {}, entry = {}) {
+    const nextState = clone(state);
+    const cache = normalizeDetailCache(nextState.detailCache);
+    const key = detailCacheKey(entry.targetType, entry.targetId);
+    const filtered = cache.filter((item) => detailCacheKey(item.targetType, item.targetId) !== key);
+    nextState.detailCache = [...filtered, {
+      targetType: entry.targetType,
+      targetId: entry.targetId,
+      data: entry.data || {},
+      source: entry.source || "web",
+      updatedAt: entry.updatedAt || todayText(),
+      expiresAt: entry.expiresAt || "",
+    }];
+    return recalculateTravelState(nextState);
+  }
+
   function setTripStatus(state = {}, tripId, status, patch = {}) {
     const nextState = clone(state);
     nextState.trips = normalizeList(nextState.trips).map((trip) => (
       trip.id === tripId ? { ...trip, ...patch, status } : trip
     ));
     return recalculateTravelState(nextState);
+  }
+
+  function normalizeCandidateName(value) {
+    return String(value || "").trim().toLowerCase().replace(/\s+/g, "");
+  }
+
+  function slugFromText(value) {
+    const slug = normalizeCandidateName(value)
+      .replace(/[^a-z0-9\u4e00-\u9fa5]+/gi, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 72);
+    return slug || "route";
+  }
+
+  function budgetLabel(value) {
+    if (value === "low") return "低";
+    if (value === "high") return "中高";
+    if (value === "medium") return "中等";
+    return value || "中等";
+  }
+
+  function candidateCountryIds(candidate, state) {
+    const countriesById = state.countriesById || byId(state.countries || []);
+    const countries = Object.values(countriesById);
+    return unique(normalizeList(candidate.countries).map((name) => {
+      const normalized = normalizeCandidateName(name);
+      const match = countries.find((country) => (
+        normalizeCandidateName(country.id) === normalized
+        || normalizeCandidateName(country.name) === normalized
+        || normalizeCandidateName(country.englishName) === normalized
+      ));
+      return match?.id || "";
+    }));
+  }
+
+  function candidateCityMatches(candidate, countryIds, state) {
+    const citiesById = state.citiesById || byId(state.cities || []);
+    const cities = Object.values(citiesById);
+    return normalizeList(candidate.cities).map((name) => {
+      const normalized = normalizeCandidateName(name);
+      const match = cities.find((city) => (
+        (!countryIds.length || countryIds.includes(city.countryId))
+        && (
+          normalizeCandidateName(city.id) === normalized
+          || normalizeCandidateName(city.name) === normalized
+          || normalizeCandidateName(city.englishName) === normalized
+        )
+      ));
+      return { name, id: match?.id || "" };
+    });
+  }
+
+  function candidateRouteId(candidate) {
+    return `candidate-route-${slugFromText([
+      candidate.name,
+      ...(candidate.countries || []),
+      ...(candidate.cities || []),
+    ].join("-"))}`;
+  }
+
+  function routeFromCandidate(candidate, state = {}) {
+    const normalizedState = state.routesById ? state : recalculateTravelState(state);
+    const countryIds = candidateCountryIds(candidate, normalizedState);
+    const cityMatches = candidateCityMatches(candidate, countryIds, normalizedState);
+    const cityIds = unique(cityMatches.map((city) => city.id));
+    const firstCountry = normalizedState.countriesById?.[countryIds[0]] || {};
+    const cityNames = unique(cityMatches.map((city) => city.name));
+    const route = {
+      id: candidateRouteId(candidate),
+      name: candidate.name || "联网候选路线",
+      kind: candidate.type === "cross_country" || countryIds.length > 1 ? "跨国路线" : "单国城市路线",
+      cover: firstCountry.cover || DEFAULT_TRIP_COVER,
+      countryIds,
+      cityIds,
+      cityNames,
+      candidateCityNames: cityNames,
+      description: candidate.description || "",
+      reason: candidate.description || "由联网候选路线保存而来。",
+      days: candidate.recommendedDays || "天数待定",
+      season: candidate.bestSeason || "按季节选择",
+      budgetLevel: budgetLabel(candidate.budgetLevel),
+      tags: normalizeList(candidate.tags),
+      keywords: normalizeList(candidate.keywords),
+      sourceUrl: candidate.sourceUrl || "",
+      sourceName: candidate.sourceName || "",
+      sourceCandidateId: candidate.id || "",
+      searchText: unique([
+        candidate.name,
+        candidate.description,
+        ...(candidate.countries || []),
+        ...(candidate.cities || []),
+        ...(candidate.tags || []),
+        ...(candidate.keywords || []),
+      ]).join(" "),
+    };
+    return route;
+  }
+
+  function setOverlap(a, b) {
+    const left = unique(normalizeList(a).map(normalizeCandidateName));
+    const right = new Set(unique(normalizeList(b).map(normalizeCandidateName)));
+    if (!left.length && !right.size) return 1;
+    if (!left.length || !right.size) return 0;
+    return left.filter((item) => right.has(item)).length / Math.max(left.length, right.size);
+  }
+
+  function nameSimilarity(a, b) {
+    const left = normalizeCandidateName(a);
+    const right = normalizeCandidateName(b);
+    if (!left || !right) return 0;
+    if (left === right || left.includes(right) || right.includes(left)) return 1;
+    const chars = new Set(left.split(""));
+    const shared = right.split("").filter((char) => chars.has(char)).length;
+    return shared / Math.max(left.length, right.length);
+  }
+
+  function routeCityNames(route, state) {
+    const citiesById = state.citiesById || byId(state.cities || []);
+    return unique([
+      ...(route.cityIds || []).map((id) => citiesById[id]?.name || id),
+      ...(route.cityNames || []),
+      ...(route.candidateCityNames || []),
+    ]);
+  }
+
+  function routeCountryNames(route, state) {
+    const countriesById = state.countriesById || byId(state.countries || []);
+    return unique((route.countryIds || []).map((id) => countriesById[id]?.name || id));
+  }
+
+  function findSimilarRoute(state = {}, candidate = {}) {
+    const normalizedState = state.routesById ? state : recalculateTravelState(state);
+    const candidateRoute = routeFromCandidate(candidate, normalizedState);
+    const candidateCountries = routeCountryNames(candidateRoute, normalizedState);
+    const candidateCities = routeCityNames(candidateRoute, normalizedState);
+    return normalizeList(normalizedState.routes).find((route) => {
+      const sameCountries = setOverlap(routeCountryNames(route, normalizedState), candidateCountries) === 1;
+      if (!sameCountries) return false;
+      const cityOverlap = setOverlap(routeCityNames(route, normalizedState), candidateCities);
+      const routeNameSimilarity = nameSimilarity(route.name, candidateRoute.name);
+      const tagSimilarity = setOverlap(route.tags, candidateRoute.tags);
+      return cityOverlap >= 0.6 || routeNameSimilarity >= 0.55 || tagSimilarity >= 0.5;
+    }) || null;
+  }
+
+  function saveRouteCandidate(state = {}, candidate = {}, options = {}) {
+    const normalizedState = state.routesById ? state : recalculateTravelState(state);
+    const duplicate = findSimilarRoute(normalizedState, candidate);
+    if (duplicate) {
+      return recalculateTravelState({
+        ...normalizedState,
+        lastRouteCandidateSave: {
+          status: "duplicate",
+          routeId: duplicate.id,
+          message: "路线库中已有相似路线",
+        },
+      });
+    }
+    const route = routeFromCandidate(candidate, normalizedState);
+    const favoriteRouteIds = options.favorite
+      ? unique([...(normalizedState.favoriteRouteIds || []), route.id])
+      : normalizeList(normalizedState.favoriteRouteIds);
+    return recalculateTravelState({
+      ...normalizedState,
+      routes: [...normalizeList(normalizedState.routes), route],
+      favoriteRouteIds,
+      lastRouteCandidateSave: {
+        status: "saved",
+        routeId: route.id,
+        message: options.favorite ? "已保存并收藏路线" : "已保存到路线库",
+      },
+    });
   }
 
   function removeTrip(state = {}, tripId) {
@@ -1016,7 +1231,12 @@
     getAchievements,
     getNotifications,
     markNotificationRead,
+    getDetailCache,
+    setDetailCache,
     setTripStatus,
+    routeFromCandidate,
+    findSimilarRoute,
+    saveRouteCandidate,
     removeTrip,
     readTravelState,
     writeTravelState,

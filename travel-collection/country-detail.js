@@ -4,6 +4,7 @@ const exploreToggleText = exploreToggle?.querySelector("span");
 const exploreModal = document.querySelector("[data-explore-modal]");
 const visitRecord = document.querySelector("[data-visit-record]");
 const recordMenu = document.querySelector("[data-record-menu]");
+let activeCountryDetail = null;
 
 function normalizeCountryHash() {
   const raw = decodeURIComponent(window.location.hash.replace(/^#/, ""));
@@ -36,22 +37,51 @@ function currentCountry(state = readTravelState()) {
   return state.countriesById?.[countryCode] || state.countriesById?.JP;
 }
 
+function budgetLabel(value) {
+  if (value === "low") return "低";
+  if (value === "high") return "中高";
+  if (value === "medium") return "中等";
+  return value || "中等";
+}
+
+function countryDetailData(country, state) {
+  const base = window.DetailEnrichment?.baseCountry?.(country, state) || {};
+  return activeCountryDetail?.id === country.id ? { ...base, ...activeCountryDetail } : base;
+}
+
+function detailStatusNode() {
+  let node = document.querySelector("[data-detail-enrichment-status]");
+  if (node) return node;
+  node = document.createElement("p");
+  node.className = "detail-enrichment-status";
+  node.setAttribute("data-detail-enrichment-status", "");
+  document.querySelector(".country-content")?.prepend(node);
+  return node;
+}
+
+function setDetailStatus(message) {
+  const node = detailStatusNode();
+  node.textContent = message || "";
+  node.hidden = !message;
+}
+
 function renderCountry() {
   const state = readTravelState();
   const country = currentCountry(state);
   if (!country) return;
+  const detail = countryDetailData(country, state);
   document.title = `${country.name} · 国家详情`;
   document.querySelector(".country-screen")?.setAttribute("aria-label", `${country.name}国家详情`);
   document.querySelector(".country-hero")?.setAttribute("aria-label", country.name);
   const heroImage = document.querySelector(".country-hero-image");
   if (heroImage) {
-    heroImage.src = country.cover || "assets/home-aurora-cover.svg";
+    heroImage.src = detail.coverImage || country.cover || "assets/home-aurora-cover.svg";
     heroImage.alt = `${country.name}封面图`;
   }
   document.querySelector(".country-hero-copy h1")?.replaceChildren(country.name);
-  document.querySelector(".country-hero-copy p")?.replaceChildren(`${country.continent || "目的地"}  |  ${(country.tags || []).slice(0, 3).join(" · ")}`);
-  document.querySelector(".country-intro")?.replaceChildren(country.intro || country.description || "");
-  document.querySelector("[data-country-tags]")?.replaceChildren(...(country.tags || []).slice(0, 5).map((tag) => {
+  document.querySelector(".country-hero-copy p")?.replaceChildren(`${country.continent || "目的地"}  |  ${(detail.tags || country.tags || []).slice(0, 3).join(" · ")}`);
+  document.querySelector(".country-intro")?.replaceChildren(detail.description || country.intro || country.description || "");
+  document.querySelector("[data-country-tags]")?.replaceChildren(...(detail.tags || country.tags || []).slice(0, 5).map((tag) => {
     const node = document.createElement("span");
     node.textContent = tag;
     return node;
@@ -59,9 +89,9 @@ function renderCountry() {
   const meta = document.querySelector("[data-country-trip-meta]");
   if (meta) {
     meta.innerHTML = `
-      <span><em>推荐天数</em><strong>${escapeHtml(country.recommendedDays || "待补充")}</strong></span>
-      <span><em>最佳季节</em><strong>${escapeHtml(country.bestSeason || "按路线季节")}</strong></span>
-      <span><em>预算</em><strong>${escapeHtml(country.budgetLevel || "中等")}</strong></span>
+      <span><em>推荐天数</em><strong>${escapeHtml(detail.recommendedDays || country.recommendedDays || "待补充")}</strong></span>
+      <span><em>最佳季节</em><strong>${escapeHtml(detail.bestSeason || country.bestSeason || "按路线季节")}</strong></span>
+      <span><em>预算</em><strong>${escapeHtml(budgetLabel(detail.budgetLevel || country.budgetLevel))}</strong></span>
     `;
   }
   document.querySelectorAll("[data-add-country-id]").forEach((button) => {
@@ -70,20 +100,20 @@ function renderCountry() {
   if (exploreToggle) exploreToggle.dataset.countryCode = country.id;
   renderExploredState(country.explorationStatus);
   renderFavoriteState(country.isFavorite);
-  renderCities(country, state);
-  renderSpots(country);
-  renderRoutes(country, state);
+  renderCities(country, state, detail);
+  renderSpots(country, detail);
+  renderRoutes(country, state, detail);
 }
 
-function renderCities(country, state) {
+function renderCities(country, state, detail = {}) {
   const list = document.querySelector(".country-city-list");
   if (!list) return;
-  const cities = (country.cityIds || [])
-    .map((id) => state.citiesById?.[id])
-    .filter(Boolean)
+  const cityRefs = detail.recommendedCities || country.cityIds || [];
+  const cities = cityRefs
+    .map((id) => state.citiesById?.[id] || { id: "", name: id, cover: country.cover, explorationStatus: "unexplored", isNameOnly: true })
     .slice(0, 3);
   list.innerHTML = cities.map((city) => `
-    <button class="country-mini-card" type="button" data-city-id="${escapeHtml(city.id)}">
+    <button class="country-mini-card" type="button" ${city.id ? `data-city-id="${escapeHtml(city.id)}"` : "disabled"}>
       <img src="${escapeHtml(city.cover || country.cover)}" alt="${escapeHtml(city.name)}封面图" />
       <span></span>
       <strong>${escapeHtml(city.name)}</strong>
@@ -200,16 +230,16 @@ function closeCountryRouteGallery() {
   }
 }
 
-function renderSpots(country) {
+function renderSpots(country, detail = {}) {
   const spots = document.querySelector("[data-country-spots]");
   if (!spots) return;
-  spots.innerHTML = (country.spots || []).slice(0, 5).map((spot) => `<span>${escapeHtml(spot)}</span>`).join("");
+  spots.innerHTML = (detail.representativeSpots || country.spots || []).slice(0, 5).map((spot) => `<span>${escapeHtml(spot)}</span>`).join("");
 }
 
-function renderRoutes(country, state) {
+function renderRoutes(country, state, detail = {}) {
   const list = document.querySelector(".country-route-list");
   if (!list) return;
-  const routes = (country.routeIds || [])
+  const routes = (detail.relatedRouteIds || country.routeIds || [])
     .map((id) => state.routesById?.[id])
     .filter(Boolean)
     .slice(0, 4);
@@ -364,4 +394,22 @@ document.querySelectorAll("[data-share]").forEach((button) => {
   });
 });
 
-renderCountry();
+async function initCountryDetail() {
+  renderCountry();
+  const state = readTravelState();
+  const country = currentCountry(state);
+  if (!country || !window.DetailEnrichment?.ensureDetailData) return;
+  const base = window.DetailEnrichment.baseCountry(country, state);
+  if (window.DetailEnrichment.completionScore("country", base) >= 90) return;
+  setDetailStatus("正在补全旅行灵感…");
+  const result = await window.DetailEnrichment.ensureDetailData("country", country.id, base, state);
+  if (result.status === "failed") {
+    setDetailStatus("暂时无法补全更多信息。");
+    return;
+  }
+  activeCountryDetail = result.data;
+  setDetailStatus("");
+  renderCountry();
+}
+
+initCountryDetail();
